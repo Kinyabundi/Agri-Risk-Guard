@@ -45,9 +45,6 @@ const GetStarted = () => {
 							<AppInput label="Phone No" name="phoneNo" placeholder="e.g. 0700123455" />
 							<AppInput label="Business" name="business" placeholder="e.g. Indiana Supplies" />
 							<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" />
-							<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" />
-							<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" />
-							<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" />
 						</div>
 						<div className="flex items-center justify-between">
 							<Button variant="outline" className="rounded-r-full rounded-bl-full" onClick={goToPreviousStep}>
