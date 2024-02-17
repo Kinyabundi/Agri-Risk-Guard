@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dfinity/auth-client": "^1.0.0",
+    "@dfinity/identity": "^1.0.0",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
