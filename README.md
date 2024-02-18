@@ -13,7 +13,7 @@ Agriculture is a cornerstone of the African economy, contributing to a significa
 The underlying issue is the absence of access to finance and technology, which prevents farmers from adopting modern farming practices and equipment, as well as hedging their risk through futures and options. 
 Additionally, farmers face the challenge of unreliable buyers and losses due to buyer defaulting. This unpredictability in the market and the risk of defaulting buyers lead to significant financial losses for farmers, who often have to sell their produce at lower prices or face the loss of their entire harvest.
 
-## Video
+## Demo Video
 [![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/6d6d4625-c6e7-44cf-8383-1444a10a6225)](https://www.youtube.com/watch?v=PnEkrBsJo5M)
 
 ## Screenshots 📸
