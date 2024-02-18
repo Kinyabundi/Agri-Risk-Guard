@@ -39,7 +39,7 @@ const NewHome = () => {
 							<Button className="w-full sm:w-auto" onClick={isAuthenticated ? logout : login}>
 								{isAuthenticated ? "Disconnect Wallet" : "Connect Wallet"}
 							</Button>
-							<Button className="w-full sm:w-auto" onClick={() => (account ? goToDashboard(account?.accountType) : "/get-started")} variant="outline">
+							<Button className="w-full sm:w-auto" onClick={() => account ? goToDashboard(account?.accountType) : router.push("/get-started")} variant="outline">
 								{account ? "Dashboard" : "Get Started"} <ArrowRightIcon className="w-4 h-4 ml-2" />
 							</Button>
 						</div>

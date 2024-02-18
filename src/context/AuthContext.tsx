@@ -2,6 +2,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { futures_contract } from "@/declarations/futures_contract";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { canisterId, createActor } from "@/declarations/futures_contract";
+import useAuthStore from "@/hooks/useAuthStore";
 
 interface AuthProviderProps {
 	children: ReactNode;
@@ -58,6 +59,7 @@ export const useAuthClient = (options = defaultOptions) => {
 	const [identity, setIdentity] = useState<any>(null);
 	const [principal, setPrincipal] = useState<any>(null);
 	const [whoamiActor, setWhoamiActor] = useState<any>(null);
+	const { resetAccount } = useAuthStore();
 
 	useEffect(() => {
 		// Initialize AuthClient
@@ -104,6 +106,7 @@ export const useAuthClient = (options = defaultOptions) => {
 
 	async function logout() {
 		await authClient?.logout();
+		resetAccount();
 		await updateClient(authClient as AuthClient);
 	}
 
