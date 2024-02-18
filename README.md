@@ -38,10 +38,10 @@ Also adding a DAO to manage the creation of new futures and options contracts.
 
 ## Built With 🛠️
 
-- Rust
-- Next JS
-- Internet Computer SDK
-- ICP Token
+- Rust - Smart Contracts
+- Next JS - Frontend
+- Internet Computer SDK - Deployment
+- ICP Token - Medium of Exchange
 
 ## Preqrequisites 📝
 
