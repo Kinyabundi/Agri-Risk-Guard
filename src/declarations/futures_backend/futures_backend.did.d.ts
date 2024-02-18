@@ -78,8 +78,14 @@ export type Result_2 = { 'Ok' : Farmer } |
 export interface _SERVICE {
   'add_buyer' : ActorMethod<[BuyerPayload], [] | [Buyer]>,
   'add_farmer' : ActorMethod<[FarmerPayload], [] | [Farmer]>,
-  'claim_long_position' : ActorMethod<[bigint, [] | [string]], Result>,
-  'claim_short_position' : ActorMethod<[bigint, [] | [string]], Result>,
+  'claim_long_position' : ActorMethod<
+    [bigint, [] | [string], Principal],
+    Result
+  >,
+  'claim_short_position' : ActorMethod<
+    [bigint, [] | [string], Principal],
+    Result
+  >,
   'create_future_contract' : ActorMethod<
     [FutureContractPayload],
     [] | [FutureContract]

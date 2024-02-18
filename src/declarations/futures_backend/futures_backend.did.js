@@ -75,12 +75,12 @@ export const idlFactory = ({ IDL }) => {
     'add_buyer' : IDL.Func([BuyerPayload], [IDL.Opt(Buyer)], []),
     'add_farmer' : IDL.Func([FarmerPayload], [IDL.Opt(Farmer)], []),
     'claim_long_position' : IDL.Func(
-        [IDL.Nat64, IDL.Opt(IDL.Text)],
+        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal],
         [Result],
         [],
       ),
     'claim_short_position' : IDL.Func(
-        [IDL.Nat64, IDL.Opt(IDL.Text)],
+        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal],
         [Result],
         [],
       ),
