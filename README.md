@@ -18,7 +18,10 @@ Additionally, farmers face the challenge of unreliable buyers and losses due to 
 
 ### Create Account
 ![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/f252a7e8-bb63-401e-86c1-4b7f455b9566)
+
+### MarketPlace With Pending Contract 
 ![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/c57065ce-0c3b-4084-ac76-fc6627988ea5)
+
 
 ![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/41672247-d269-4a45-b353-e5a4c977a6d4)
 ![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/cf9efb17-c754-4732-a94c-04999e770084)
