@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { Control } from "react-hook-form";
+import { Control, FieldError } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";

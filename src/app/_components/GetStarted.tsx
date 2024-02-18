@@ -1,9 +1,12 @@
 "use client";
-import { AppInput } from "@/components/app-forms";
 import GetStartedWrapper from "./GetStartedWrapper";
 import Stepper, { StepItem } from "@/components/stepper";
 import useSteps from "@/hooks/useSteps";
 import { Button } from "@/components/ui/button";
+import { AccountType } from "@/types/Account";
+import { useState } from "react";
+import OnboardBuyer from "./OnboardBuyer";
+import OnboardFarmer from "./OnboardFarmer";
 
 const steps: StepItem[] = [
 	{
@@ -19,6 +22,7 @@ const GetStarted = () => {
 		initialStep: 0,
 		count: steps.length,
 	});
+	const [accountType, setAccountType] = useState<AccountType>("buyer");
 
 	return (
 		<GetStartedWrapper>
@@ -28,32 +32,28 @@ const GetStarted = () => {
 					<div className="flex flex-col space-y-10">
 						<h3 className="text-3xl font-medium">Are you a buyer or a seller</h3>
 						<div className="flex items-center justify-between">
-							<Button className="rounded-r-full rounded-bl-full" onClick={goToNextStep}>
+							<Button
+								className="rounded-r-full rounded-bl-full"
+								onClick={() => {
+									setAccountType("buyer");
+									goToNextStep();
+								}}>
 								Am a Buyer
 							</Button>
-							<Button variant="outline" className="rounded-r-full rounded-bl-full" onClick={goToNextStep}>
+							<Button
+								variant="outline"
+								className="rounded-r-full rounded-bl-full"
+								onClick={() => {
+									setAccountType("farmer");
+									goToNextStep();
+								}}>
 								Am a Seller / Farmer
 							</Button>
 						</div>
 					</div>
 				)}
-				{activeStep === 1 && (
-					<>
-						<div className="space-y-3">
-							<AppInput label="Name" name="name" placeholder="e.g. John Legend" className="focus:border-none" />
-							<AppInput label="Email" name="email" placeholder="e.g. john.legend@gmail.com" />
-							<AppInput label="Phone No" name="phoneNo" placeholder="e.g. 0700123455" />
-							<AppInput label="Business" name="business" placeholder="e.g. Indiana Supplies" />
-							<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" />
-						</div>
-						<div className="flex items-center justify-between">
-							<Button variant="outline" className="rounded-r-full rounded-bl-full" onClick={goToPreviousStep}>
-								Back
-							</Button>
-							<Button className="rounded-r-full rounded-bl-full">Submit</Button>
-						</div>
-					</>
-				)}
+				{activeStep === 1 && accountType === "buyer" && <OnboardBuyer goToPreviousStep={goToPreviousStep} />}
+				{activeStep === 1 && accountType === "farmer" && <OnboardFarmer goToPreviousStep={goToPreviousStep} />}
 			</div>
 		</GetStartedWrapper>
 	);
