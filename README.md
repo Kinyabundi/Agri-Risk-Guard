@@ -11,6 +11,12 @@ Agriculture is a cornerstone of the African economy, contributing to a significa
 The underlying issue is the absence of access to finance and technology, which prevents farmers from adopting modern farming practices and equipment, as well as hedging their risk through futures and options. 
 Additionally, farmers face the challenge of unreliable buyers and losses due to buyer defaulting. This unpredictability in the market and the risk of defaulting buyers lead to significant financial losses for farmers, who often have to sell their produce at lower prices or face the loss of their entire harvest.
 
+## Screenshots 📸
+
+![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/6d6d4625-c6e7-44cf-8383-1444a10a6225)
+
+
+
 ## What it does 🚀
 
 Agri Risk Guard is a decentralized agricultural futures and options marketplace on the Internet Computer. It allows farmers to hedge their risk and investors to invest in agriculture. The farmers can hedge their risk by selling futures and options on their crops. The investors can invest in agriculture by buying futures and options on the crops. The farmers and investors can trade futures and options on the platform. The platform uses smart contracts to ensure trust and transparency. The smart contracts are executed on the Internet Computer, which is a decentralized and secure platform. The smart contracts are used to prove the creditworthiness of the farmers and the ownership of the land. The smart contracts are also used to execute the futures and options contracts. The platform uses the Internet Computer's native token, ICP, as the medium of exchange. The ICP token is used to pay for the futures and options contracts. The ICP token is also used to pay for the execution of the smart contracts.
