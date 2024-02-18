@@ -5,7 +5,7 @@ import { AppInput } from "@/components/app-forms";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { futures_backend } from "@/declarations/futures_backend";
+import { futures_backend } from "@/declarations/futures_contract";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 

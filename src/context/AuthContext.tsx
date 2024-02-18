@@ -1,7 +1,7 @@
 import { AuthClient } from "@dfinity/auth-client";
-import { futures_backend } from "@/declarations/futures_backend"
+import { futures_backend } from "@/declarations/futures_contract"
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { canisterId, createActor } from "@/declarations/futures_backend";
+import { canisterId, createActor } from "@/declarations/futures_contract";
 
 interface AuthProviderProps {
 	children: ReactNode;

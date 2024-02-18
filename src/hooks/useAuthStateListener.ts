@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import useAuthStore from "./useAuthStore";
 import { useEffect } from "react";
-import { futures_backend } from "../declarations/futures_backend";
+import { futures_backend } from "../declarations/futures_contract";
 import { Principal } from "@dfinity/principal";
 
 const useAuthStateListener = () => {

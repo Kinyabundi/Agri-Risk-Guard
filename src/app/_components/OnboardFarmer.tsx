@@ -1,6 +1,6 @@
 import { AppInput } from "@/components/app-forms";
 import { Button } from "@/components/ui/button";
-import { futures_backend } from "@/declarations/futures_backend";
+import { futures_backend } from "@/declarations/futures_contract";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
