@@ -16,7 +16,6 @@ use ic_ledger_types::{
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{BoundedStorable, Cell, DefaultMemoryImpl, StableBTreeMap, Storable};
 use std::{borrow::Cow, cell::RefCell};
-
 use lazy_static::lazy_static;
 
 lazy_static! {
@@ -167,7 +166,6 @@ struct FutureContractPayload {
     price_per_unit: u64,
     terms_and_conditions: String,
     expected_month_of_harvest: String,
-    contract_status: ContractStatus,
 }
 
 thread_local! {
@@ -231,6 +229,15 @@ fn get_all_farmers() -> Vec<Farmer> {
 // create a new farmer
 #[ic_cdk::update]
 fn add_farmer(payload: FarmerPayload) -> Option<Farmer> {
+
+    let caller_principal = ic_cdk::caller();
+    // Check if a farmer already exists for the caller's principal
+    if let Ok(existing_farmer) = get_farmer_by_principal(caller_principal) {
+        // If a farmer already exists, return None
+        Some(existing_farmer);
+        return None;
+    }
+
     let id = ID_COUNTER.with(|counter| {
         let counter_value = *counter.borrow().get();
         let _ = counter.borrow_mut().set(counter_value + 1);
@@ -297,6 +304,15 @@ fn get_buyer_by_principal(principal: Principal) -> Result<Buyer, String> {
 // create a new buyer
 #[ic_cdk::update]
 fn add_buyer(payload: BuyerPayload) -> Option<Buyer> {
+
+    let caller_principal = ic_cdk::caller();
+    // Check if a buyer already exists for the caller's principal
+    if let Ok(existing_buyer) = get_buyer_by_principal(caller_principal) {
+        // If a buyer already exists, return None
+        Some(existing_buyer);
+        return None;
+    }
+
     let id = ID_COUNTER.with(|counter| {
         let counter_value = *counter.borrow().get();
         let _ = counter.borrow_mut().set(counter_value + 1);
@@ -378,6 +394,7 @@ fn get_contracts_by_buyer(buyer: Principal) -> Vec<FutureContract> {
 // create a new Future contract
 #[ic_cdk::update]
 fn create_future_contract(payload: FutureContractPayload) -> Option<FutureContract> {
+
     let id = ID_COUNTER.with(|counter| {
         let counter_value = *counter.borrow().get();
         let _ = counter.borrow_mut().set(counter_value + 1);
@@ -436,6 +453,7 @@ async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Pr
     future_contract.short_position_holder = Some(ic_cdk::caller());
     future_contract.bargain = Some(bargain.unwrap_or("".to_string()));
     do_insert_future_contract(&future_contract);
+
     // Call the async function to transfer margin
     match transfer_margin(amount, to_principal).await{
         Ok(_block_index) => {
@@ -445,6 +463,7 @@ async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Pr
             return Err(format!("Failed to transfer margin: {}", e));
         }
     }
+    
 }
 
 // method to accept the contract by the buyer
@@ -465,6 +484,7 @@ async fn claim_long_position(id: u64, bargain: Option<String>, to_principal: Pri
     future_contract.long_position_holder = Some(ic_cdk::caller());
     future_contract.bargain = Some(bargain.unwrap_or("".to_string()));
     do_insert_future_contract(&future_contract);
+
     // Call the async function to transfer margin
     match transfer_margin(amount, to_principal).await{
         Ok(_block_index) => {

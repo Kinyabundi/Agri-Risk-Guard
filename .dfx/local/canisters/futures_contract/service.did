@@ -65,7 +65,6 @@ type FutureContractPayload = record {
   price_per_unit : nat64;
   crop : text;
   expected_yield : nat64;
-  contract_status : ContractStatus;
 };
 type Result = variant { Ok : FutureContract; Err : text };
 type Result_1 = variant { Ok : Buyer; Err : text };

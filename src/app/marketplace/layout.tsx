@@ -4,18 +4,15 @@ import NavItem from "@/components/navigation/NavItem";
 import UserNav from "@/components/navigation/UserNav";
 import { FC, ReactNode } from "react";
 
-interface FarmerLayoutProps {
+interface MarketplaceLayoutProps {
 	children: ReactNode | ReactNode[];
 }
 
 const navItems = [
-	<NavItem text="Dashboard" href="farmer" />,
-	<NavItem text="My Contract" href="farmer/contracts" />,
-	<NavItem text="Explore Marketplace" href="marketplace" />,
-	<NavItem text="Profile" href="farmer/profile" />,
+	<NavItem text="Dashboard" href="buyer" />
 ];
 
-const FarmerLayout: FC<Readonly<FarmerLayoutProps>> = ({ children }) => {
+const MarketplaceLayout: FC<MarketplaceLayoutProps> = ({ children }) => {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<div className="border-b">
@@ -32,4 +29,4 @@ const FarmerLayout: FC<Readonly<FarmerLayoutProps>> = ({ children }) => {
 	);
 };
 
-export default FarmerLayout;
+export default MarketplaceLayout;

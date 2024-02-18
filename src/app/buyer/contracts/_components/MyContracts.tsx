@@ -1,34 +1,24 @@
 "use client";
-
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import useAuthStore from "@/hooks/useAuthStore";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { IContract } from "@/types/Contract";
 import { useState, useEffect } from "react";
 import { futures_contract } from "@/declarations/futures_contract";
-import { IContract } from "@/types/Contract";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import ClaimShortPositionModal from "@/components/modals/ClaimShortPositionModal";
-import ClaimLongPositionModal from "@/components/modals/ClaimLongPositionModal";
+import useAuthStore from "@/hooks/useAuthStore";
 
 interface CardItemProps {
 	item: IContract;
-	refresh?: () => void;
 }
 
-const Marketplace = () => {
-	const { account } = useAuthStore();
+const MyContracts = () => {
 	const [contracts, setContracts] = useState<IContract[]>([]);
+	const { account } = useAuthStore();
 
 	const fetchAllContracts = async () => {
 		try {
-			const allContracts = await futures_contract.get_all_future_contracts();
+			const allContracts = await futures_contract.get_contracts_by_buyer(account?.principal);
 			if (allContracts) {
-				// show only that are either created or pending
-				const filteredContracts = allContracts.filter((contract) => {
-					const currentStatus = Object.keys(contract.contract_status)?.[0];
-					return currentStatus === "Created" || currentStatus === "Pending";
-				});
-				setContracts(filteredContracts as unknown as IContract[]);
+				setContracts(allContracts as unknown as IContract[]);
 			}
 		} catch (error) {
 			console.error(error);
@@ -41,12 +31,14 @@ const Marketplace = () => {
 
 	return (
 		<div>
-			<h1>Explore the Futures and Options Marketplace</h1>
+			<h1>
+				<span className="text-3xl font-semibold text-gray-800">My Contracts</span>
+			</h1>
 			{contracts?.length === 0 && <p className="my-4">No contracts available</p>}
 			{contracts?.length > 0 && (
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-5 my-6">
 					{contracts.map((contract) => (
-						<CardItem item={contract} refresh={fetchAllContracts} />
+						<CardItem item={contract} />
 					))}
 				</div>
 			)}
@@ -54,11 +46,10 @@ const Marketplace = () => {
 	);
 };
 
-const CardItem = ({ item, refresh }: CardItemProps) => {
+const CardItem = ({ item }: CardItemProps) => {
 	// extract contract_status from item in Object
 	const { contract_status } = item;
 	const currentStatus = Object.keys(contract_status)?.[0];
-	const { account } = useAuthStore();
 
 	return (
 		<Card>
@@ -87,17 +78,8 @@ const CardItem = ({ item, refresh }: CardItemProps) => {
 					Expected yield(Kgs): <span className="text-gray-600 font-normal">{Number(item?.expected_yield)}</span>
 				</div>
 			</CardContent>
-			<CardFooter className="flex items-center space-x-2">
-				{currentStatus === "Created" && account?.accountType === "farmer" && (
-					<>
-						<ClaimShortPositionModal contractInfo={item} refresh={refresh} />
-						<ClaimLongPositionModal contractInfo={item} refresh={refresh} />
-					</>
-				)}
-				{currentStatus === "Pending" && <ClaimLongPositionModal contractInfo={item} refresh={refresh} />}
-			</CardFooter>
 		</Card>
 	);
 };
 
-export default Marketplace;
+export default MyContracts;

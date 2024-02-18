@@ -67,7 +67,6 @@ export interface FutureContractPayload {
   'price_per_unit' : bigint,
   'crop' : string,
   'expected_yield' : bigint,
-  'contract_status' : ContractStatus,
 }
 export type Result = { 'Ok' : FutureContract } |
   { 'Err' : string };

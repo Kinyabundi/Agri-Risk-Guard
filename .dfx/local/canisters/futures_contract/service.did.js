@@ -67,7 +67,6 @@ export const idlFactory = ({ IDL }) => {
     'price_per_unit' : IDL.Nat64,
     'crop' : IDL.Text,
     'expected_yield' : IDL.Nat64,
-    'contract_status' : ContractStatus,
   });
   const Result_1 = IDL.Variant({ 'Ok' : Buyer, 'Err' : IDL.Text });
   const Result_2 = IDL.Variant({ 'Ok' : Farmer, 'Err' : IDL.Text });

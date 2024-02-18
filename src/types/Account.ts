@@ -1,3 +1,5 @@
+import { Principal } from "@dfinity/principal";
+
 export interface IFarmer {
 	name: string;
 	location: string;
@@ -6,7 +8,7 @@ export interface IFarmer {
 	phone_number: string;
 	national_id: string;
 	size_of_land: string;
-	principal: string;
+	principal: Principal;
 	id: number;
 }
 
@@ -16,7 +18,7 @@ export interface IBuyer {
 	email: string;
 	phone_number: string;
 	organization: string;
-	principal: string;
+	principal: Principal;
 	id: number;
 }
 

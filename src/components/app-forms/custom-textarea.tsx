@@ -1,23 +1,22 @@
 import { ChangeEvent } from "react";
-import { Control, FieldError } from "react-hook-form";
+import { Control } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 
 interface IProps {
 	label: string;
 	name?: string;
 	description?: string;
 	value?: string;
-	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 	setValue?: (value: string) => void;
 	control?: Control<any>;
 	placeholder?: string;
-	className?: string
-	type?: string;
+	className?: string;
 }
 
-const ControlledInput = ({ label, name, description, control, placeholder, className, type }: Omit<IProps, "value" | "setValue" | "name" | "onChange"> & { name: string }) => {
+const ControlledTextarea = ({ label, name, description, control, placeholder, className }: Omit<IProps, "value" | "setValue" | "name" | "onChange"> & { name: string }) => {
 	return (
 		<FormField
 			name={name}
@@ -26,7 +25,7 @@ const ControlledInput = ({ label, name, description, control, placeholder, class
 				<FormItem>
 					<FormLabel>{label}</FormLabel>
 					<FormControl>
-						<Input {...field} placeholder={placeholder} className={className} type={type} />
+						<Textarea {...field} placeholder={placeholder} className={className} />
 					</FormControl>
 					<FormDescription>{description}</FormDescription>
 					<FormMessage />
@@ -36,11 +35,11 @@ const ControlledInput = ({ label, name, description, control, placeholder, class
 	);
 };
 
-const UncontrolledInput = ({ label, description, value, setValue, onChange, placeholder, className, type }: Omit<IProps, "control" | "name">) => {
+const UncontrolledTextarea = ({ label, description, value, setValue, onChange, placeholder, className }: Omit<IProps, "control" | "name">) => {
 	return (
 		<div className="flex flex-col space-y-3">
 			<Label>{label}</Label>
-			<Input
+			<Textarea
 				value={value}
 				onChange={(e) => {
 					onChange && onChange(e);
@@ -48,15 +47,14 @@ const UncontrolledInput = ({ label, description, value, setValue, onChange, plac
 				}}
 				placeholder={placeholder}
 				className={className}
-				type={type}
 			/>
 			<p>{description}</p>
 		</div>
 	);
 };
 
-const CustomInput = (props: IProps) => {
-	return props?.control ? <ControlledInput {...props} name={props?.name ?? props?.label} /> : <UncontrolledInput {...props} />;
+const CustomTextArea = (props: IProps) => {
+	return props?.control ? <ControlledTextarea {...props} name={props?.name ?? props?.label} /> : <UncontrolledTextarea {...props} />;
 };
 
-export default CustomInput;
+export default CustomTextArea;

@@ -9,7 +9,10 @@ export { idlFactory } from "./futures_contract.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId = process.env.NEXT_PUBLIC_CANISTER_ID || process.env.NEXT_PUBLIC_FUTURES_CONTRACT_CANISTER_ID;
+console.log(process.env.NEXT_PUBLIC_CANISTER_ID);
+export const canisterId =
+  process.env.NEXT_PUBLIC_CANISTER_ID ||
+  process.env.NEXT_PUBLIC_FUTURES_CONTRACT_CANISTER_ID;
 
 export const createActor = (canisterId, options = {}) => {
 	const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -34,4 +37,8 @@ export const createActor = (canisterId, options = {}) => {
 	});
 };
 
+// export const futures_contract = canisterId ? createActor(canisterId) : undefined;
+
+
+// Path: src/declarations/futures_contract/index.js
 export const futures_contract = canisterId ? createActor(canisterId) : undefined;

@@ -10,7 +10,7 @@ interface BuyerLayoutProps {
 
 const navItems = [
 	<NavItem text="Dashboard" href="buyer" />,
-	<NavItem text="My Contract" href="buyer/my-contracts" />,
+	<NavItem text="My Contract" href="buyer/contracts" />,
 	<NavItem text="Explore Marketplace" href="marketplace" />,
 	<NavItem text="Profile" href="buyer/profile" />,
 ];
