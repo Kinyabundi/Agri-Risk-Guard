@@ -4,12 +4,17 @@ Decentralized Agricultural Futures and Options MarketPlace on ICP.
 
 Allowing farmers to hedge their risk and investors to invest in agriculture.
 
+
+
 ## Inspiration 💡
 
 Agriculture is a cornerstone of the African economy, contributing to a significant portion of the continent's GDP and employment. However, the sector is plagued by low productivity, high volatility, and low income, largely due to the farmers' vulnerability to weather, pests, and market fluctuations. Government initiatives such as MSP, crop insurance, and subsidies have not been as effective as hoped, leaving farmers in a precarious financial state. The recent farmer protests in India serve as a stark reminder of the farmers' plight.
 
 The underlying issue is the absence of access to finance and technology, which prevents farmers from adopting modern farming practices and equipment, as well as hedging their risk through futures and options. 
 Additionally, farmers face the challenge of unreliable buyers and losses due to buyer defaulting. This unpredictability in the market and the risk of defaulting buyers lead to significant financial losses for farmers, who often have to sell their produce at lower prices or face the loss of their entire harvest.
+
+## Video
+![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/6d6d4625-c6e7-44cf-8383-1444a10a6225)(https://youtu.be/PnEkrBsJo5M?si=z2CxIsENkSWjbjd8)
 
 ## Screenshots 📸
 
