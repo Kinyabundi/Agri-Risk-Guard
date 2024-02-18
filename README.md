@@ -43,4 +43,49 @@ Also adding a DAO to manage the creation of new futures and options contracts.
 - Internet Computer SDK
 - ICP Token
 
-## Try it out 🚀
+## Preqrequisites 📝
+
+- [DFINITY SDK](https://sdk.dfinity.org/docs/download.html)
+- [Node.js](https://nodejs.org/en/download/)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install)
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Internet Computer Canister SDK](https://sdk.dfinity.org/docs/quickstart/local-quickstart.html)
+
+## Installation 📦
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/Kinyabundi/Agri-Risk-Guard.git
+```
+
+2. Install the dependencies
+
+```bash
+cd Agri-Risk-Guard
+yarn install:all
+```
+
+3. Build the frontend
+
+```bash
+yarn build
+```
+
+4. Deploy the project to the Internet Computer
+
+```bash
+dfx deploy
+```
+
+## Usage 🚀
+
+1. Open the frontend url in your browser
+
+```bash
+http://127.0.0.0.1:4943/?canisterId=<canister_id>
+```
+
+2. Connect your wallet to the frontend
+
+3. Start trading futures and options
