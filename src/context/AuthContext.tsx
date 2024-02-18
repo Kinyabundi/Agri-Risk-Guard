@@ -1,5 +1,5 @@
 import { AuthClient } from "@dfinity/auth-client";
-import { futures_backend } from "@/declarations/futures_contract"
+import { futures_contract } from "@/declarations/futures_contract";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { canisterId, createActor } from "@/declarations/futures_contract";
 
@@ -73,7 +73,7 @@ export const useAuthClient = (options = defaultOptions) => {
 				const principal = authClient?.getIdentity()?.getPrincipal();
 				// const principalText = principal?.toText();
 
-				const farmer = await futures_backend.get_farmer_by_principal(principal);
+				const farmer = await futures_contract.get_farmer_by_principal(principal);
 				console.log("farmer", farmer);
 
 				updateClient(authClient);

@@ -1,7 +1,7 @@
 import { AppInput } from "@/components/app-forms";
 import { Button } from "@/components/ui/button";
-import { futures_backend } from "@/declarations/futures_contract";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { futures_contract } from "@/declarations/futures_contract";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -45,7 +45,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
         setLoading(true);
 
         try {
-            const newAccount = await futures_backend.add_farmer(payload as any);
+            const newAccount = await futures_contract.add_farmer(payload as any);
             console.log(newAccount);
             toast.success("Account created successfully", { id });
             reset();

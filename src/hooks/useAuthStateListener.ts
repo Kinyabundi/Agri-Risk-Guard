@@ -1,7 +1,8 @@
 import { useAuth } from "@/context/AuthContext";
 import useAuthStore from "./useAuthStore";
 import { useEffect } from "react";
-import { futures_backend } from "../declarations/futures_contract";
+import { futures_contract } from "@/declarations/futures_contract";
+
 import { Principal } from "@dfinity/principal";
 
 const useAuthStateListener = () => {
@@ -10,14 +11,14 @@ const useAuthStateListener = () => {
 
 	useEffect(() => {
 		async function fetchAccount() {
-			if (!futures_backend || !principal) return;
+			if (!futures_contract || !principal) return;
 
-			console.log(futures_backend);
+			console.log(futures_contract);
 
-			const principalItem = await futures_backend.get_principal();
+			const principalItem = await futures_contract.get_principal();
 			const principalObj = Principal.fromText(principalItem.toText());
-			const farmer = await futures_backend.get_farmer_by_principal(principalObj);
-			const buyer = await futures_backend.get_buyer_by_principal(principalObj);
+			const farmer = await futures_contract.get_farmer_by_principal(principalObj);
+			const buyer = await futures_contract.get_buyer_by_principal(principalObj);
 
 			if (!farmer && !buyer) {
 				setAccount(null);
@@ -38,7 +39,7 @@ const useAuthStateListener = () => {
 		}
 
 		fetchAccount();
-	}, [principal, futures_backend]);
+	}, [principal, futures_contract]);
 };
 
 export default useAuthStateListener;
