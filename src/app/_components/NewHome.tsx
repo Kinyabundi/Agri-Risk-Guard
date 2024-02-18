@@ -2,13 +2,26 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import useAuthStore from "@/hooks/useAuthStore";
+import { AccountType } from "@/types/Account";
 import { ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+const dashboardTypes: Record<string, string> = {
+	farmer: "/farmer",
+	buyer: "/buyer",
+};
 
 const NewHome = () => {
 	const router = useRouter();
 	const { login, logout, isAuthenticated } = useAuth();
 	const { account } = useAuthStore();
+
+	const goToDashboard = (accountType: AccountType) => {
+		const path = dashboardTypes[accountType];
+		if (path) {
+			router.push(path);
+		}
+	};
 	return (
 		<section className="w-full min-h-screen bg-white dark:bg-gray-900">
 			<div className="container relative flex flex-col min-h-screen px-6 py-8 mx-auto">
@@ -26,7 +39,7 @@ const NewHome = () => {
 							<Button className="w-full sm:w-auto" onClick={isAuthenticated ? logout : login}>
 								{isAuthenticated ? "Disconnect Wallet" : "Connect Wallet"}
 							</Button>
-							<Button className="w-full sm:w-auto" onClick={() => router.push(account ? "/marketplace" : "/get-started")} variant="outline">
+							<Button className="w-full sm:w-auto" onClick={() => (account ? goToDashboard(account?.accountType) : "/get-started")} variant="outline">
 								{account ? "Dashboard" : "Get Started"} <ArrowRightIcon className="w-4 h-4 ml-2" />
 							</Button>
 						</div>

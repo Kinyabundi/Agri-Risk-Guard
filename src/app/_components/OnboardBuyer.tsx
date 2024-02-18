@@ -33,7 +33,7 @@ const OnboardBuyer = ({ goToPreviousStep }: OnboardBuyerProps) => {
 			name: data.name,
 			email: [data.email],
 			phone_number: data.phone_number,
-			organization: [data.organization] || [""],
+			organization: data?.organization ? [data?.organization] : [],
 			location: data.location,
 		};
 		const id = toast.loading("Creating account...");

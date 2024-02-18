@@ -1,13 +1,13 @@
 import { useAuth } from "@/context/AuthContext";
 import useAuthStore from "./useAuthStore";
 import { useEffect } from "react";
-import { futures_contract } from "@/declarations/futures_contract";
+import { futures_contract } from "../declarations/futures_contract/index.d";
 
 import { Principal } from "@dfinity/principal";
 
 const useAuthStateListener = () => {
 	const { principal } = useAuth();
-	const { setAccount } = useAuthStore();
+	const { setAccount, account } = useAuthStore();
 
 	useEffect(() => {
 		async function fetchAccount() {
@@ -40,6 +40,8 @@ const useAuthStateListener = () => {
 
 		fetchAccount();
 	}, [principal, futures_contract]);
+
+	console.log(account);
 };
 
 export default useAuthStateListener;

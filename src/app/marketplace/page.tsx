@@ -1,5 +1,7 @@
+import Marketplace from "./_components/Marketplace";
+
 const page = () => {
-	return <div>page</div>;
+	return <Marketplace />;
 };
 
 export default page;

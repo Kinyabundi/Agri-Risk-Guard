@@ -34,7 +34,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
         const differentCrops = data.croptypes.split(",");
         const payload = {
             name: data.name,
-            email: [data.email] || [""],
+            email: data?.email ? [data?.email] : [],
             phone_number: data.phone_number,
             national_id: data.national_id,
             croptypes: differentCrops,
@@ -45,6 +45,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
         setLoading(true);
 
         try {
+			console.log(futures_contract)
             const newAccount = await futures_contract.add_farmer(payload as any);
             console.log(newAccount);
             toast.success("Account created successfully", { id });
@@ -67,7 +68,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
 					<AppInput label="Phone No" name="phone_number" placeholder="e.g. 0700123455" control={control} />
 					<AppInput label="National ID" name="national_id" placeholder="e.g. 12345678" control={control} />
 					<AppInput label="Where are you located?" name="location" placeholder="e.g. Nairobi" control={control} />
-					<AppInput label="Size of Land" name="size_of_land" placeholder="e.g. 5 acres" control={control} />
+					<AppInput label="Size of Land"  name="size_of_land" placeholder="e.g. 5 acres" control={control} />
 					<AppInput label="What do you grow?" name="croptypes" placeholder="e.g. Maize, Beans, etc" control={control} />
 				</div>
 				<div className="flex items-center justify-between">
