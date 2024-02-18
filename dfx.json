@@ -3,7 +3,7 @@
     "futures_contract": {
       "type": "rust",
       "candid": "backend/futures_contract/futures_contract.did",
-      "package": "futures_backend",
+      "package": "futures_contract",
       "declarations": {
         "node_compatibility": true
       }

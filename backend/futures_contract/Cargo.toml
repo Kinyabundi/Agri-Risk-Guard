@@ -1,5 +1,5 @@
 [package]
-name = "futures_backend"
+name = "futures_contract"
 version = "0.1.0"
 edition = "2021"
 

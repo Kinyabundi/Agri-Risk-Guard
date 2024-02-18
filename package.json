@@ -12,8 +12,8 @@
     "lint": "next lint",
     "dfx:start": "dfx start --background --clean",
     "dfx:stop": "dfx stop",
-    "dfx:build": "sh ./predeploy.sh && dfx build",
-    "predeploy": "sh ./predeploy.sh",
+    "dfx:build": "sh ./did.sh && dfx build",
+    "predeploy": "sh ./did.sh",
     "deploy": "dfx deploy",
     "generate": "dfx generate"
   },

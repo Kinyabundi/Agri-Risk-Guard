@@ -10,10 +10,14 @@ no_color='\033[0m'
 
 for app_root in "$backend_dir"/*; do
     package=$(basename "$app_root")
+    echo "Building $package"
     did_file="$app_root/$package.did"
+    cargo_toml="$app_root/Cargo.toml"
 
     echo "${green}Building $package in $app_root${no_color}"
-    cargo build --manifest-path="$app_root/Cargo.toml" \
+    echo "Using Cargo.toml at $cargo_toml"
+    echo "Running cargo build with --manifest-path=$cargo_toml"
+    cargo build --manifest-path="$cargo_toml" \
         --target wasm32-unknown-unknown \
         --release \
         --package "$package"
