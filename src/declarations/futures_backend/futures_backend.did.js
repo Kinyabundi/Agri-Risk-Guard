@@ -1,286 +1,126 @@
 export const idlFactory = ({ IDL }) => {
-  const SetPermissions = IDL.Record({
-    'prepare' : IDL.Vec(IDL.Principal),
-    'commit' : IDL.Vec(IDL.Principal),
-    'manage_permissions' : IDL.Vec(IDL.Principal),
+  const BuyerPayload = IDL.Record({
+    'name' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
+    'organization' : IDL.Opt(IDL.Text),
+    'phone_number' : IDL.Text,
+    'location' : IDL.Text,
   });
-  const UpgradeArgs = IDL.Record({
-    'set_permissions' : IDL.Opt(SetPermissions),
+  const Buyer = IDL.Record({
+    'id' : IDL.Nat64,
+    'principal' : IDL.Principal,
+    'name' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
+    'organization' : IDL.Opt(IDL.Text),
+    'phone_number' : IDL.Text,
+    'location' : IDL.Text,
   });
-  const InitArgs = IDL.Record({});
-  const AssetCanisterArgs = IDL.Variant({
-    'Upgrade' : UpgradeArgs,
-    'Init' : InitArgs,
+  const FarmerPayload = IDL.Record({
+    'size_of_land' : IDL.Nat64,
+    'name' : IDL.Text,
+    'national_id' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
+    'phone_number' : IDL.Text,
+    'location' : IDL.Text,
+    'croptypes' : IDL.Vec(IDL.Text),
   });
-  const ClearArguments = IDL.Record({});
-  const BatchId = IDL.Nat;
-  const Key = IDL.Text;
-  const HeaderField = IDL.Tuple(IDL.Text, IDL.Text);
-  const SetAssetPropertiesArguments = IDL.Record({
-    'key' : Key,
-    'headers' : IDL.Opt(IDL.Opt(IDL.Vec(HeaderField))),
-    'is_aliased' : IDL.Opt(IDL.Opt(IDL.Bool)),
-    'allow_raw_access' : IDL.Opt(IDL.Opt(IDL.Bool)),
-    'max_age' : IDL.Opt(IDL.Opt(IDL.Nat64)),
+  const Farmer = IDL.Record({
+    'id' : IDL.Nat64,
+    'updated_at' : IDL.Opt(IDL.Nat64),
+    'principal' : IDL.Principal,
+    'size_of_land' : IDL.Nat64,
+    'name' : IDL.Text,
+    'created_at' : IDL.Nat64,
+    'national_id' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
+    'phone_number' : IDL.Text,
+    'location' : IDL.Text,
+    'croptypes' : IDL.Vec(IDL.Text),
   });
-  const CreateAssetArguments = IDL.Record({
-    'key' : Key,
-    'content_type' : IDL.Text,
-    'headers' : IDL.Opt(IDL.Vec(HeaderField)),
-    'allow_raw_access' : IDL.Opt(IDL.Bool),
-    'max_age' : IDL.Opt(IDL.Nat64),
-    'enable_aliasing' : IDL.Opt(IDL.Bool),
+  const ContractStatus = IDL.Variant({
+    'Terminated' : IDL.Null,
+    'InProgress' : IDL.Null,
+    'Created' : IDL.Null,
+    'Completed' : IDL.Null,
+    'Pending' : IDL.Null,
   });
-  const UnsetAssetContentArguments = IDL.Record({
-    'key' : Key,
-    'content_encoding' : IDL.Text,
+  const FutureContract = IDL.Record({
+    'id' : IDL.Nat64,
+    'buyer_accepted' : IDL.Bool,
+    'terms_and_conditions' : IDL.Text,
+    'expected_month_of_harvest' : IDL.Text,
+    'price_per_unit' : IDL.Nat64,
+    'crop' : IDL.Text,
+    'long_position_holder' : IDL.Opt(IDL.Principal),
+    'bargain' : IDL.Opt(IDL.Text),
+    'farmer_accepted' : IDL.Bool,
+    'buyer' : IDL.Opt(IDL.Principal),
+    'expected_yield' : IDL.Nat64,
+    'farmer' : IDL.Opt(IDL.Principal),
+    'short_position_holder' : IDL.Opt(IDL.Principal),
+    'contract_status' : ContractStatus,
   });
-  const DeleteAssetArguments = IDL.Record({ 'key' : Key });
-  const ChunkId = IDL.Nat;
-  const SetAssetContentArguments = IDL.Record({
-    'key' : Key,
-    'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'chunk_ids' : IDL.Vec(ChunkId),
-    'content_encoding' : IDL.Text,
+  const Result = IDL.Variant({ 'Ok' : FutureContract, 'Err' : IDL.Text });
+  const FutureContractPayload = IDL.Record({
+    'terms_and_conditions' : IDL.Text,
+    'expected_month_of_harvest' : IDL.Text,
+    'price_per_unit' : IDL.Nat64,
+    'crop' : IDL.Text,
+    'expected_yield' : IDL.Nat64,
+    'contract_status' : ContractStatus,
   });
-  const BatchOperationKind = IDL.Variant({
-    'SetAssetProperties' : SetAssetPropertiesArguments,
-    'CreateAsset' : CreateAssetArguments,
-    'UnsetAssetContent' : UnsetAssetContentArguments,
-    'DeleteAsset' : DeleteAssetArguments,
-    'SetAssetContent' : SetAssetContentArguments,
-    'Clear' : ClearArguments,
-  });
-  const CommitBatchArguments = IDL.Record({
-    'batch_id' : BatchId,
-    'operations' : IDL.Vec(BatchOperationKind),
-  });
-  const CommitProposedBatchArguments = IDL.Record({
-    'batch_id' : BatchId,
-    'evidence' : IDL.Vec(IDL.Nat8),
-  });
-  const ComputeEvidenceArguments = IDL.Record({
-    'batch_id' : BatchId,
-    'max_iterations' : IDL.Opt(IDL.Nat16),
-  });
-  const ConfigureArguments = IDL.Record({
-    'max_batches' : IDL.Opt(IDL.Opt(IDL.Nat64)),
-    'max_bytes' : IDL.Opt(IDL.Opt(IDL.Nat64)),
-    'max_chunks' : IDL.Opt(IDL.Opt(IDL.Nat64)),
-  });
-  const DeleteBatchArguments = IDL.Record({ 'batch_id' : BatchId });
-  const ConfigurationResponse = IDL.Record({
-    'max_batches' : IDL.Opt(IDL.Nat64),
-    'max_bytes' : IDL.Opt(IDL.Nat64),
-    'max_chunks' : IDL.Opt(IDL.Nat64),
-  });
-  const Permission = IDL.Variant({
-    'Prepare' : IDL.Null,
-    'ManagePermissions' : IDL.Null,
-    'Commit' : IDL.Null,
-  });
-  const GrantPermission = IDL.Record({
-    'permission' : Permission,
-    'to_principal' : IDL.Principal,
-  });
-  const HttpRequest = IDL.Record({
-    'url' : IDL.Text,
-    'method' : IDL.Text,
-    'body' : IDL.Vec(IDL.Nat8),
-    'headers' : IDL.Vec(HeaderField),
-    'certificate_version' : IDL.Opt(IDL.Nat16),
-  });
-  const StreamingCallbackToken = IDL.Record({
-    'key' : Key,
-    'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-    'index' : IDL.Nat,
-    'content_encoding' : IDL.Text,
-  });
-  const StreamingCallbackHttpResponse = IDL.Record({
-    'token' : IDL.Opt(StreamingCallbackToken),
-    'body' : IDL.Vec(IDL.Nat8),
-  });
-  const StreamingStrategy = IDL.Variant({
-    'Callback' : IDL.Record({
-      'token' : StreamingCallbackToken,
-      'callback' : IDL.Func(
-          [StreamingCallbackToken],
-          [IDL.Opt(StreamingCallbackHttpResponse)],
-          ['query'],
-        ),
-    }),
-  });
-  const HttpResponse = IDL.Record({
-    'body' : IDL.Vec(IDL.Nat8),
-    'headers' : IDL.Vec(HeaderField),
-    'streaming_strategy' : IDL.Opt(StreamingStrategy),
-    'status_code' : IDL.Nat16,
-  });
-  const Time = IDL.Int;
-  const ListPermitted = IDL.Record({ 'permission' : Permission });
-  const RevokePermission = IDL.Record({
-    'permission' : Permission,
-    'of_principal' : IDL.Principal,
-  });
-  const ValidationResult = IDL.Variant({ 'Ok' : IDL.Text, 'Err' : IDL.Text });
+  const Result_1 = IDL.Variant({ 'Ok' : Buyer, 'Err' : IDL.Text });
+  const Result_2 = IDL.Variant({ 'Ok' : Farmer, 'Err' : IDL.Text });
   return IDL.Service({
-    'api_version' : IDL.Func([], [IDL.Nat16], ['query']),
-    'authorize' : IDL.Func([IDL.Principal], [], []),
-    'certified_tree' : IDL.Func(
-        [IDL.Record({})],
-        [
-          IDL.Record({
-            'certificate' : IDL.Vec(IDL.Nat8),
-            'tree' : IDL.Vec(IDL.Nat8),
-          }),
-        ],
+    'add_buyer' : IDL.Func([BuyerPayload], [IDL.Opt(Buyer)], []),
+    'add_farmer' : IDL.Func([FarmerPayload], [IDL.Opt(Farmer)], []),
+    'claim_long_position' : IDL.Func(
+        [IDL.Nat64, IDL.Opt(IDL.Text)],
+        [Result],
+        [],
+      ),
+    'claim_short_position' : IDL.Func(
+        [IDL.Nat64, IDL.Opt(IDL.Text)],
+        [Result],
+        [],
+      ),
+    'create_future_contract' : IDL.Func(
+        [FutureContractPayload],
+        [IDL.Opt(FutureContract)],
+        [],
+      ),
+    'get_all_buyers' : IDL.Func([], [IDL.Vec(Buyer)], ['query']),
+    'get_all_farmers' : IDL.Func([], [IDL.Vec(Farmer)], ['query']),
+    'get_all_future_contracts' : IDL.Func(
+        [],
+        [IDL.Vec(FutureContract)],
         ['query'],
       ),
-    'clear' : IDL.Func([ClearArguments], [], []),
-    'commit_batch' : IDL.Func([CommitBatchArguments], [], []),
-    'commit_proposed_batch' : IDL.Func([CommitProposedBatchArguments], [], []),
-    'compute_evidence' : IDL.Func(
-        [ComputeEvidenceArguments],
-        [IDL.Opt(IDL.Vec(IDL.Nat8))],
-        [],
-      ),
-    'configure' : IDL.Func([ConfigureArguments], [], []),
-    'create_asset' : IDL.Func([CreateAssetArguments], [], []),
-    'create_batch' : IDL.Func(
-        [IDL.Record({})],
-        [IDL.Record({ 'batch_id' : BatchId })],
-        [],
-      ),
-    'create_chunk' : IDL.Func(
-        [IDL.Record({ 'content' : IDL.Vec(IDL.Nat8), 'batch_id' : BatchId })],
-        [IDL.Record({ 'chunk_id' : ChunkId })],
-        [],
-      ),
-    'deauthorize' : IDL.Func([IDL.Principal], [], []),
-    'delete_asset' : IDL.Func([DeleteAssetArguments], [], []),
-    'delete_batch' : IDL.Func([DeleteBatchArguments], [], []),
-    'get' : IDL.Func(
-        [IDL.Record({ 'key' : Key, 'accept_encodings' : IDL.Vec(IDL.Text) })],
-        [
-          IDL.Record({
-            'content' : IDL.Vec(IDL.Nat8),
-            'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-            'content_type' : IDL.Text,
-            'content_encoding' : IDL.Text,
-            'total_length' : IDL.Nat,
-          }),
-        ],
+    'get_buyer' : IDL.Func([IDL.Nat64], [Result_1], ['query']),
+    'get_buyer_by_principal' : IDL.Func([IDL.Principal], [Result_1], ['query']),
+    'get_contracts_by_buyer' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(FutureContract)],
         ['query'],
       ),
-    'get_asset_properties' : IDL.Func(
-        [Key],
-        [
-          IDL.Record({
-            'headers' : IDL.Opt(IDL.Vec(HeaderField)),
-            'is_aliased' : IDL.Opt(IDL.Bool),
-            'allow_raw_access' : IDL.Opt(IDL.Bool),
-            'max_age' : IDL.Opt(IDL.Nat64),
-          }),
-        ],
+    'get_contracts_by_contract_status' : IDL.Func(
+        [ContractStatus],
+        [IDL.Vec(FutureContract)],
         ['query'],
       ),
-    'get_chunk' : IDL.Func(
-        [
-          IDL.Record({
-            'key' : Key,
-            'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-            'index' : IDL.Nat,
-            'content_encoding' : IDL.Text,
-          }),
-        ],
-        [IDL.Record({ 'content' : IDL.Vec(IDL.Nat8) })],
+    'get_contracts_by_farmer' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(FutureContract)],
         ['query'],
       ),
-    'get_configuration' : IDL.Func([], [ConfigurationResponse], []),
-    'grant_permission' : IDL.Func([GrantPermission], [], []),
-    'http_request' : IDL.Func([HttpRequest], [HttpResponse], ['query']),
-    'http_request_streaming_callback' : IDL.Func(
-        [StreamingCallbackToken],
-        [IDL.Opt(StreamingCallbackHttpResponse)],
+    'get_farmer' : IDL.Func([IDL.Nat64], [Result_2], ['query']),
+    'get_farmer_by_principal' : IDL.Func(
+        [IDL.Principal],
+        [Result_2],
         ['query'],
       ),
-    'list' : IDL.Func(
-        [IDL.Record({})],
-        [
-          IDL.Vec(
-            IDL.Record({
-              'key' : Key,
-              'encodings' : IDL.Vec(
-                IDL.Record({
-                  'modified' : Time,
-                  'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-                  'length' : IDL.Nat,
-                  'content_encoding' : IDL.Text,
-                })
-              ),
-              'content_type' : IDL.Text,
-            })
-          ),
-        ],
-        ['query'],
-      ),
-    'list_authorized' : IDL.Func([], [IDL.Vec(IDL.Principal)], []),
-    'list_permitted' : IDL.Func([ListPermitted], [IDL.Vec(IDL.Principal)], []),
-    'propose_commit_batch' : IDL.Func([CommitBatchArguments], [], []),
-    'revoke_permission' : IDL.Func([RevokePermission], [], []),
-    'set_asset_content' : IDL.Func([SetAssetContentArguments], [], []),
-    'set_asset_properties' : IDL.Func([SetAssetPropertiesArguments], [], []),
-    'store' : IDL.Func(
-        [
-          IDL.Record({
-            'key' : Key,
-            'content' : IDL.Vec(IDL.Nat8),
-            'sha256' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-            'content_type' : IDL.Text,
-            'content_encoding' : IDL.Text,
-          }),
-        ],
-        [],
-        [],
-      ),
-    'take_ownership' : IDL.Func([], [], []),
-    'unset_asset_content' : IDL.Func([UnsetAssetContentArguments], [], []),
-    'validate_commit_proposed_batch' : IDL.Func(
-        [CommitProposedBatchArguments],
-        [ValidationResult],
-        [],
-      ),
-    'validate_configure' : IDL.Func(
-        [ConfigureArguments],
-        [ValidationResult],
-        [],
-      ),
-    'validate_grant_permission' : IDL.Func(
-        [GrantPermission],
-        [ValidationResult],
-        [],
-      ),
-    'validate_revoke_permission' : IDL.Func(
-        [RevokePermission],
-        [ValidationResult],
-        [],
-      ),
-    'validate_take_ownership' : IDL.Func([], [ValidationResult], []),
+    'get_future_contract' : IDL.Func([IDL.Nat64], [Result], ['query']),
+    'get_principal' : IDL.Func([], [IDL.Principal], ['query']),
   });
 };
-export const init = ({ IDL }) => {
-  const SetPermissions = IDL.Record({
-    'prepare' : IDL.Vec(IDL.Principal),
-    'commit' : IDL.Vec(IDL.Principal),
-    'manage_permissions' : IDL.Vec(IDL.Principal),
-  });
-  const UpgradeArgs = IDL.Record({
-    'set_permissions' : IDL.Opt(SetPermissions),
-  });
-  const InitArgs = IDL.Record({});
-  const AssetCanisterArgs = IDL.Variant({
-    'Upgrade' : UpgradeArgs,
-    'Init' : InitArgs,
-  });
-  return [IDL.Opt(AssetCanisterArgs)];
-};
+export const init = ({ IDL }) => { return []; };

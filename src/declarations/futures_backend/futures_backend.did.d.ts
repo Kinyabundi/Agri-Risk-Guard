@@ -2,239 +2,103 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export type AssetCanisterArgs = { 'Upgrade' : UpgradeArgs } |
-  { 'Init' : InitArgs };
-export type BatchId = bigint;
-export type BatchOperationKind = {
-    'SetAssetProperties' : SetAssetPropertiesArguments
-  } |
-  { 'CreateAsset' : CreateAssetArguments } |
-  { 'UnsetAssetContent' : UnsetAssetContentArguments } |
-  { 'DeleteAsset' : DeleteAssetArguments } |
-  { 'SetAssetContent' : SetAssetContentArguments } |
-  { 'Clear' : ClearArguments };
-export type ChunkId = bigint;
-export type ClearArguments = {};
-export interface CommitBatchArguments {
-  'batch_id' : BatchId,
-  'operations' : Array<BatchOperationKind>,
+export interface Buyer {
+  'id' : bigint,
+  'principal' : Principal,
+  'name' : string,
+  'email' : [] | [string],
+  'organization' : [] | [string],
+  'phone_number' : string,
+  'location' : string,
 }
-export interface CommitProposedBatchArguments {
-  'batch_id' : BatchId,
-  'evidence' : Uint8Array | number[],
+export interface BuyerPayload {
+  'name' : string,
+  'email' : [] | [string],
+  'organization' : [] | [string],
+  'phone_number' : string,
+  'location' : string,
 }
-export interface ComputeEvidenceArguments {
-  'batch_id' : BatchId,
-  'max_iterations' : [] | [number],
+export type ContractStatus = { 'Terminated' : null } |
+  { 'InProgress' : null } |
+  { 'Created' : null } |
+  { 'Completed' : null } |
+  { 'Pending' : null };
+export interface Farmer {
+  'id' : bigint,
+  'updated_at' : [] | [bigint],
+  'principal' : Principal,
+  'size_of_land' : bigint,
+  'name' : string,
+  'created_at' : bigint,
+  'national_id' : string,
+  'email' : [] | [string],
+  'phone_number' : string,
+  'location' : string,
+  'croptypes' : Array<string>,
 }
-export interface ConfigurationResponse {
-  'max_batches' : [] | [bigint],
-  'max_bytes' : [] | [bigint],
-  'max_chunks' : [] | [bigint],
+export interface FarmerPayload {
+  'size_of_land' : bigint,
+  'name' : string,
+  'national_id' : string,
+  'email' : [] | [string],
+  'phone_number' : string,
+  'location' : string,
+  'croptypes' : Array<string>,
 }
-export interface ConfigureArguments {
-  'max_batches' : [] | [[] | [bigint]],
-  'max_bytes' : [] | [[] | [bigint]],
-  'max_chunks' : [] | [[] | [bigint]],
+export interface FutureContract {
+  'id' : bigint,
+  'buyer_accepted' : boolean,
+  'terms_and_conditions' : string,
+  'expected_month_of_harvest' : string,
+  'price_per_unit' : bigint,
+  'crop' : string,
+  'long_position_holder' : [] | [Principal],
+  'bargain' : [] | [string],
+  'farmer_accepted' : boolean,
+  'buyer' : [] | [Principal],
+  'expected_yield' : bigint,
+  'farmer' : [] | [Principal],
+  'short_position_holder' : [] | [Principal],
+  'contract_status' : ContractStatus,
 }
-export interface CreateAssetArguments {
-  'key' : Key,
-  'content_type' : string,
-  'headers' : [] | [Array<HeaderField>],
-  'allow_raw_access' : [] | [boolean],
-  'max_age' : [] | [bigint],
-  'enable_aliasing' : [] | [boolean],
+export interface FutureContractPayload {
+  'terms_and_conditions' : string,
+  'expected_month_of_harvest' : string,
+  'price_per_unit' : bigint,
+  'crop' : string,
+  'expected_yield' : bigint,
+  'contract_status' : ContractStatus,
 }
-export interface DeleteAssetArguments { 'key' : Key }
-export interface DeleteBatchArguments { 'batch_id' : BatchId }
-export interface GrantPermission {
-  'permission' : Permission,
-  'to_principal' : Principal,
-}
-export type HeaderField = [string, string];
-export interface HttpRequest {
-  'url' : string,
-  'method' : string,
-  'body' : Uint8Array | number[],
-  'headers' : Array<HeaderField>,
-  'certificate_version' : [] | [number],
-}
-export interface HttpResponse {
-  'body' : Uint8Array | number[],
-  'headers' : Array<HeaderField>,
-  'streaming_strategy' : [] | [StreamingStrategy],
-  'status_code' : number,
-}
-export type InitArgs = {};
-export type Key = string;
-export interface ListPermitted { 'permission' : Permission }
-export type Permission = { 'Prepare' : null } |
-  { 'ManagePermissions' : null } |
-  { 'Commit' : null };
-export interface RevokePermission {
-  'permission' : Permission,
-  'of_principal' : Principal,
-}
-export interface SetAssetContentArguments {
-  'key' : Key,
-  'sha256' : [] | [Uint8Array | number[]],
-  'chunk_ids' : Array<ChunkId>,
-  'content_encoding' : string,
-}
-export interface SetAssetPropertiesArguments {
-  'key' : Key,
-  'headers' : [] | [[] | [Array<HeaderField>]],
-  'is_aliased' : [] | [[] | [boolean]],
-  'allow_raw_access' : [] | [[] | [boolean]],
-  'max_age' : [] | [[] | [bigint]],
-}
-export interface SetPermissions {
-  'prepare' : Array<Principal>,
-  'commit' : Array<Principal>,
-  'manage_permissions' : Array<Principal>,
-}
-export interface StreamingCallbackHttpResponse {
-  'token' : [] | [StreamingCallbackToken],
-  'body' : Uint8Array | number[],
-}
-export interface StreamingCallbackToken {
-  'key' : Key,
-  'sha256' : [] | [Uint8Array | number[]],
-  'index' : bigint,
-  'content_encoding' : string,
-}
-export type StreamingStrategy = {
-    'Callback' : {
-      'token' : StreamingCallbackToken,
-      'callback' : [Principal, string],
-    }
-  };
-export type Time = bigint;
-export interface UnsetAssetContentArguments {
-  'key' : Key,
-  'content_encoding' : string,
-}
-export interface UpgradeArgs { 'set_permissions' : [] | [SetPermissions] }
-export type ValidationResult = { 'Ok' : string } |
+export type Result = { 'Ok' : FutureContract } |
+  { 'Err' : string };
+export type Result_1 = { 'Ok' : Buyer } |
+  { 'Err' : string };
+export type Result_2 = { 'Ok' : Farmer } |
   { 'Err' : string };
 export interface _SERVICE {
-  'api_version' : ActorMethod<[], number>,
-  'authorize' : ActorMethod<[Principal], undefined>,
-  'certified_tree' : ActorMethod<
-    [{}],
-    { 'certificate' : Uint8Array | number[], 'tree' : Uint8Array | number[] }
+  'add_buyer' : ActorMethod<[BuyerPayload], [] | [Buyer]>,
+  'add_farmer' : ActorMethod<[FarmerPayload], [] | [Farmer]>,
+  'claim_long_position' : ActorMethod<[bigint, [] | [string]], Result>,
+  'claim_short_position' : ActorMethod<[bigint, [] | [string]], Result>,
+  'create_future_contract' : ActorMethod<
+    [FutureContractPayload],
+    [] | [FutureContract]
   >,
-  'clear' : ActorMethod<[ClearArguments], undefined>,
-  'commit_batch' : ActorMethod<[CommitBatchArguments], undefined>,
-  'commit_proposed_batch' : ActorMethod<
-    [CommitProposedBatchArguments],
-    undefined
+  'get_all_buyers' : ActorMethod<[], Array<Buyer>>,
+  'get_all_farmers' : ActorMethod<[], Array<Farmer>>,
+  'get_all_future_contracts' : ActorMethod<[], Array<FutureContract>>,
+  'get_buyer' : ActorMethod<[bigint], Result_1>,
+  'get_buyer_by_principal' : ActorMethod<[Principal], Result_1>,
+  'get_contracts_by_buyer' : ActorMethod<[Principal], Array<FutureContract>>,
+  'get_contracts_by_contract_status' : ActorMethod<
+    [ContractStatus],
+    Array<FutureContract>
   >,
-  'compute_evidence' : ActorMethod<
-    [ComputeEvidenceArguments],
-    [] | [Uint8Array | number[]]
-  >,
-  'configure' : ActorMethod<[ConfigureArguments], undefined>,
-  'create_asset' : ActorMethod<[CreateAssetArguments], undefined>,
-  'create_batch' : ActorMethod<[{}], { 'batch_id' : BatchId }>,
-  'create_chunk' : ActorMethod<
-    [{ 'content' : Uint8Array | number[], 'batch_id' : BatchId }],
-    { 'chunk_id' : ChunkId }
-  >,
-  'deauthorize' : ActorMethod<[Principal], undefined>,
-  'delete_asset' : ActorMethod<[DeleteAssetArguments], undefined>,
-  'delete_batch' : ActorMethod<[DeleteBatchArguments], undefined>,
-  'get' : ActorMethod<
-    [{ 'key' : Key, 'accept_encodings' : Array<string> }],
-    {
-      'content' : Uint8Array | number[],
-      'sha256' : [] | [Uint8Array | number[]],
-      'content_type' : string,
-      'content_encoding' : string,
-      'total_length' : bigint,
-    }
-  >,
-  'get_asset_properties' : ActorMethod<
-    [Key],
-    {
-      'headers' : [] | [Array<HeaderField>],
-      'is_aliased' : [] | [boolean],
-      'allow_raw_access' : [] | [boolean],
-      'max_age' : [] | [bigint],
-    }
-  >,
-  'get_chunk' : ActorMethod<
-    [
-      {
-        'key' : Key,
-        'sha256' : [] | [Uint8Array | number[]],
-        'index' : bigint,
-        'content_encoding' : string,
-      },
-    ],
-    { 'content' : Uint8Array | number[] }
-  >,
-  'get_configuration' : ActorMethod<[], ConfigurationResponse>,
-  'grant_permission' : ActorMethod<[GrantPermission], undefined>,
-  'http_request' : ActorMethod<[HttpRequest], HttpResponse>,
-  'http_request_streaming_callback' : ActorMethod<
-    [StreamingCallbackToken],
-    [] | [StreamingCallbackHttpResponse]
-  >,
-  'list' : ActorMethod<
-    [{}],
-    Array<
-      {
-        'key' : Key,
-        'encodings' : Array<
-          {
-            'modified' : Time,
-            'sha256' : [] | [Uint8Array | number[]],
-            'length' : bigint,
-            'content_encoding' : string,
-          }
-        >,
-        'content_type' : string,
-      }
-    >
-  >,
-  'list_authorized' : ActorMethod<[], Array<Principal>>,
-  'list_permitted' : ActorMethod<[ListPermitted], Array<Principal>>,
-  'propose_commit_batch' : ActorMethod<[CommitBatchArguments], undefined>,
-  'revoke_permission' : ActorMethod<[RevokePermission], undefined>,
-  'set_asset_content' : ActorMethod<[SetAssetContentArguments], undefined>,
-  'set_asset_properties' : ActorMethod<
-    [SetAssetPropertiesArguments],
-    undefined
-  >,
-  'store' : ActorMethod<
-    [
-      {
-        'key' : Key,
-        'content' : Uint8Array | number[],
-        'sha256' : [] | [Uint8Array | number[]],
-        'content_type' : string,
-        'content_encoding' : string,
-      },
-    ],
-    undefined
-  >,
-  'take_ownership' : ActorMethod<[], undefined>,
-  'unset_asset_content' : ActorMethod<[UnsetAssetContentArguments], undefined>,
-  'validate_commit_proposed_batch' : ActorMethod<
-    [CommitProposedBatchArguments],
-    ValidationResult
-  >,
-  'validate_configure' : ActorMethod<[ConfigureArguments], ValidationResult>,
-  'validate_grant_permission' : ActorMethod<
-    [GrantPermission],
-    ValidationResult
-  >,
-  'validate_revoke_permission' : ActorMethod<
-    [RevokePermission],
-    ValidationResult
-  >,
-  'validate_take_ownership' : ActorMethod<[], ValidationResult>,
+  'get_contracts_by_farmer' : ActorMethod<[Principal], Array<FutureContract>>,
+  'get_farmer' : ActorMethod<[bigint], Result_2>,
+  'get_farmer_by_principal' : ActorMethod<[Principal], Result_2>,
+  'get_future_contract' : ActorMethod<[bigint], Result>,
+  'get_principal' : ActorMethod<[], Principal>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];
