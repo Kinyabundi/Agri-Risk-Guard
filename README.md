@@ -14,7 +14,7 @@ The underlying issue is the absence of access to finance and technology, which p
 Additionally, farmers face the challenge of unreliable buyers and losses due to buyer defaulting. This unpredictability in the market and the risk of defaulting buyers lead to significant financial losses for farmers, who often have to sell their produce at lower prices or face the loss of their entire harvest.
 
 ## Video
-![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/6d6d4625-c6e7-44cf-8383-1444a10a6225)(https://youtu.be/PnEkrBsJo5M?si=z2CxIsENkSWjbjd8)
+[![image](https://github.com/Kinyabundi/Agri-Risk-Guard/assets/75924698/6d6d4625-c6e7-44cf-8383-1444a10a6225)](https://youtu.be/PnEkrBsJo5M?si=z2CxIsENkSWjbjd8)
 
 ## Screenshots 📸
 
