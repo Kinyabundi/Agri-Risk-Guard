@@ -31,9 +31,9 @@ const OnboardBuyer = ({ goToPreviousStep }: OnboardBuyerProps) => {
 	const onSubmit = async (data: InferType<typeof formSchema>) => {
 		const payload = {
 			name: data.name,
-			email: data.email,
+			email: [data.email],
 			phone_number: data.phone_number,
-			organization: data.organization || "",
+			organization: [data.organization] || [""],
 			location: data.location,
 		};
 		const id = toast.loading("Creating account...");
@@ -46,6 +46,7 @@ const OnboardBuyer = ({ goToPreviousStep }: OnboardBuyerProps) => {
 			reset();
             router.push("/buyer");
 		} catch (err) {
+			console.error(err);
 			toast.error("An error occurred. Please try again", { id });
 		} finally {
 			setLoading(false);

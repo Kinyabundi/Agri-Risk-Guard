@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { InferType, object, string } from "yup";
+import { InferType, number, object, string } from "yup";
 
 interface OnboardFarmerProps {
 	goToPreviousStep: () => void;
@@ -19,7 +19,7 @@ const formSchema = object({
 	phone_number: string().required("Phone number is required"),
 	national_id: string().required("National ID is required"),
 	croptypes: string().required("Crop types are required"),
-	size_of_land: string().required("Size of land is required"),
+	size_of_land: number().required("Size of land is required"),
 	location: string().required("Location is required"),
 });
 
@@ -34,7 +34,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
         const differentCrops = data.croptypes.split(",");
         const payload = {
             name: data.name,
-            email: data.email,
+            email: [data.email] || [""],
             phone_number: data.phone_number,
             national_id: data.national_id,
             croptypes: differentCrops,
@@ -51,6 +51,7 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
             reset();
             router.push("/farmer")
         } catch (err) {
+			console.error(err);
             toast.error("An error occurred. Please try again", { id });
         } finally {
             setLoading(false);
