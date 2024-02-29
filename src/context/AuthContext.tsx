@@ -3,6 +3,8 @@ import { futures_contract } from "@/declarations/futures_contract";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { canisterId, createActor } from "@/declarations/futures_contract";
 import useAuthStore from "@/hooks/useAuthStore";
+import { HttpAgent } from "@dfinity/agent";
+
 
 interface AuthProviderProps {
 	children: ReactNode;
@@ -16,16 +18,18 @@ interface AuthContextProps {
 	identity: any;
 	principal: any;
 	whoamiActor: any;
+	identifier: any;
 }
 
 const AuthContext = createContext<AuthContextProps>({
 	isAuthenticated: false,
-	login: () => {},
-	logout: () => {},
+	login: () => { },
+	logout: () => { },
 	authClient: null,
 	identity: null,
 	principal: null,
 	whoamiActor: null,
+	identifier: null,
 });
 
 const defaultOptions = {
@@ -59,6 +63,7 @@ export const useAuthClient = (options = defaultOptions) => {
 	const [identity, setIdentity] = useState<any>(null);
 	const [principal, setPrincipal] = useState<any>(null);
 	const [whoamiActor, setWhoamiActor] = useState<any>(null);
+	const [identifier, setIdentifier] = useState<any>(null);
 	const { resetAccount } = useAuthStore();
 
 	useEffect(() => {
@@ -72,11 +77,25 @@ export const useAuthClient = (options = defaultOptions) => {
 		authClient?.login?.({
 			...options.loginOptions,
 			onSuccess: async () => {
-				const principal = authClient?.getIdentity()?.getPrincipal();
-				// const principalText = principal?.toText();
+				// Get the identity of the current user
+				const identity = authClient.getIdentity();
+				console.log("This is the identity", identity);
 
-				const farmer = await futures_contract.get_farmer_by_principal(principal);
+				const agent = new HttpAgent({ identity });
+				const principal = identity.getPrincipal();
+				console.log("This is the principal", principal);
+
+				const identifier = principal.toText();
+				console.log("This is the identifier", identifier);
+				const farmer = await futures_contract.get_farmer_by_identifier(identifier);
+				// const farmer = await futures_contract.get_farmer_by_principal(principal);
 				console.log("farmer", farmer);
+
+				const farmers = await futures_contract.get_all_farmers();
+				console.log("farmers", farmers);
+
+				const buyer = await futures_contract.get_buyer_by_identifier(identifier);
+				console.log("buyer", buyer);
 
 				updateClient(authClient);
 			},
@@ -91,7 +110,12 @@ export const useAuthClient = (options = defaultOptions) => {
 		setIdentity(identity);
 
 		const principal = identity.getPrincipal();
-		setPrincipal(principal);
+		// setPrincipal(principal);
+
+		const identifier = principal.toText();
+		setIdentifier(identifier);
+
+		const agent = new HttpAgent({ identity });
 
 		setAuthClient(client);
 
@@ -118,6 +142,7 @@ export const useAuthClient = (options = defaultOptions) => {
 		identity,
 		principal,
 		whoamiActor,
+		identifier,
 	};
 };
 

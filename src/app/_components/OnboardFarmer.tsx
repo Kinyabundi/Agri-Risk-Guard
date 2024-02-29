@@ -8,6 +8,8 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { InferType, number, object, string } from "yup";
+import { useAuth } from "@/context/AuthContext";
+
 
 interface OnboardFarmerProps {
 	goToPreviousStep: () => void;
@@ -27,6 +29,10 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
 	const formMethods = useForm({ resolver: yupResolver(formSchema) });
 	const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
+	const { identifier } = useAuth();
+
+
+	console.log("35",identifier);
 
 	const { handleSubmit, reset, control } = formMethods;
 
@@ -40,17 +46,24 @@ const OnboardFarmer = ({ goToPreviousStep }: OnboardFarmerProps) => {
             croptypes: differentCrops,
             size_of_land: data.size_of_land,
             location: data.location,
+			identifier: identifier,
         }
+		console.log("payload", payload);
         const id = toast.loading("Creating account...");
         setLoading(true);
 
         try {
 			console.log(futures_contract)
             const newAccount = await futures_contract.add_farmer(payload as any);
-            console.log(newAccount);
-            toast.success("Account created successfully", { id });
-            reset();
-            router.push("/farmer")
+			if(newAccount) {
+				console.log(newAccount);
+				toast.success("Account created successfully", { id });
+				reset();
+				router.push("/farmer")
+			} else {
+				toast.error("An error occurred. Please try again", { id });
+			}
+           
         } catch (err) {
 			console.error(err);
             toast.error("An error occurred. Please try again", { id });

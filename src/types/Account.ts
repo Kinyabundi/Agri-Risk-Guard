@@ -10,6 +10,7 @@ export interface IFarmer {
 	size_of_land: string;
 	principal: Principal;
 	id: number;
+	identifier: string;
 }
 
 export interface IBuyer {
@@ -20,6 +21,7 @@ export interface IBuyer {
 	organization: string;
 	principal: Principal;
 	id: number;
+	identifier: string;
 }
 
 export type AccountType = "farmer" | "buyer";

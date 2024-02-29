@@ -4,12 +4,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { getInitials } from "@/utils";
-import { Principal } from "@dfinity/principal";
 
 export default function UserNav() {
 	const { account } = useAuthStore();
 	console.log(account);
-	console.log(account?.principal?.toText());
+	console.log(account?.identifier);
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>

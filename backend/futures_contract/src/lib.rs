@@ -41,7 +41,7 @@ struct Farmer {
     created_at: u64,
     updated_at: Option<u64>,
     id: u64,
-    principal: Principal,
+    identifier: String,
 }
 
 // a trait to implement the farmer struct that is stored in a stable struct
@@ -71,6 +71,7 @@ struct FarmerPayload {
     size_of_land: u64,
     location: String,
     national_id: String,
+    identifier: String,
 }
 
 // define a struct for the buyers(people who buy the crops)
@@ -82,7 +83,7 @@ struct Buyer {
     organization: Option<String>,
     id: u64,
     location: String,
-    principal: Principal,
+    identifier: String,
 }
 
 //a trait that must be implemented for the buyer struct that is stored in a stable struct
@@ -103,13 +104,14 @@ impl BoundedStorable for Buyer {
 }
 
 //define the struct for the buyer payload
-#[derive(candid::CandidType, Deserialize, Serialize, Clone, Default, Debug)]
+#[derive(candid::CandidType, Deserialize, Serialize, Clone, Debug)]
 struct BuyerPayload {
     name: String,
     email: Option<String>,
     phone_number: String,
     organization: Option<String>,
     location: String,
+    identifier: String,
 }
 
 //define enum for contract status
@@ -135,10 +137,10 @@ struct FutureContract {
     id: u64,
     buyer_accepted: bool,
     farmer_accepted: bool,
-    farmer: Option<Principal>,
-    buyer: Option<Principal>,
-    short_position_holder: Option<Principal>,
-    long_position_holder: Option<Principal>,
+    farmer: Option<String>,
+    buyer: Option<String>,
+    short_position_holder: Option<String>,
+    long_position_holder: Option<String>,
 }
 
 //a trait that must be implemented for the cropcontract struct that is stored in a stable struct
@@ -201,18 +203,6 @@ fn get_farmer(id: u64) -> Result<Farmer, String> {
     match_get_farmer(&id).ok_or_else(|| format!("Farmer with id={} not found", id))
 }
 
-//get farmer by principal
-#[ic_cdk::query]
-fn get_farmer_by_principal(principal: Principal) -> Result<Farmer, String> {
-    STORAGE.with(|service| {
-        service
-            .borrow()
-            .iter()
-            .map(|(_key, value)| value.clone())
-            .find(|farmer| farmer.principal == principal)
-            .ok_or_else(|| format!("Farmer with principal={} not found", principal))
-    })
-}
 
 //get all farmers
 #[ic_cdk::query]
@@ -226,13 +216,25 @@ fn get_all_farmers() -> Vec<Farmer> {
     })
 }
 
+//get farmer by identifier
+#[ic_cdk::query]
+fn get_farmer_by_identifier(identifier: String) -> Result<Farmer, String> {
+    STORAGE.with(|service| {
+        service
+            .borrow()
+            .iter()
+            .map(|(_key, value)| value.clone())
+            .find(|farmer| farmer.identifier == identifier)
+            .ok_or_else(|| format!("Farmer with identifier={} not found", identifier))
+    })
+}
+
 // create a new farmer
 #[ic_cdk::update]
 fn add_farmer(payload: FarmerPayload) -> Option<Farmer> {
 
-    let caller_principal = ic_cdk::caller();
-    // Check if a farmer already exists for the caller's principal
-    if let Ok(existing_farmer) = get_farmer_by_principal(caller_principal) {
+    // check a farmer already exists for the identifier
+    if let Ok(existing_farmer) = get_farmer_by_identifier(payload.identifier.clone()) {
         // If a farmer already exists, return None
         Some(existing_farmer);
         return None;
@@ -254,7 +256,7 @@ fn add_farmer(payload: FarmerPayload) -> Option<Farmer> {
         created_at: time(),
         updated_at: None,
         id,
-        principal: ic_cdk::caller(),
+        identifier: payload.identifier,
     };
     do_insert_farmer(&farmer);
     Some(farmer)
@@ -288,26 +290,26 @@ fn get_all_buyers() -> Vec<Buyer> {
     })
 }
 
-// get buyer by principal
+//get buyer by identifier
 #[ic_cdk::query]
-fn get_buyer_by_principal(principal: Principal) -> Result<Buyer, String> {
+fn get_buyer_by_identifier(identifier: String) -> Result<Buyer, String> {
     BUYER_STORAGE.with(|service| {
         service
             .borrow()
             .iter()
             .map(|(_key, value)| value.clone())
-            .find(|buyer| buyer.principal == principal)
-            .ok_or_else(|| format!("Buyer with principal={} not found", principal))
+            .find(|buyer| buyer.identifier == identifier)
+            .ok_or_else(|| format!("Buyer with identifier={} not found", identifier))
     })
 }
 
+
 // create a new buyer
 #[ic_cdk::update]
-fn add_buyer(payload: BuyerPayload) -> Option<Buyer> {
+fn add_buyer(payload: BuyerPayload) ->  Option<Buyer> {
 
-    let caller_principal = ic_cdk::caller();
-    // Check if a buyer already exists for the caller's principal
-    if let Ok(existing_buyer) = get_buyer_by_principal(caller_principal) {
+ // Check if a buyer already exists for the identifier
+    if let Ok(existing_buyer) = get_buyer_by_identifier(payload.identifier.clone()) {
         // If a buyer already exists, return None
         Some(existing_buyer);
         return None;
@@ -325,9 +327,9 @@ fn add_buyer(payload: BuyerPayload) -> Option<Buyer> {
         organization: None,
         location: payload.location,
         id,
-        principal: ic_cdk::caller(),
-    };
-    do_insert_buyer(&buyer);
+        identifier: payload.identifier,
+    };                                                  
+     do_insert_buyer(&buyer);
     Some(buyer)
 }
 
@@ -338,7 +340,9 @@ fn match_get_buyer(id: &u64) -> Option<Buyer> {
 
 // helper method to perform the insert operation
 fn do_insert_buyer(buyer: &Buyer) {
-    BUYER_STORAGE.with(|service| service.borrow_mut().insert(buyer.id, buyer.clone()));
+    BUYER_STORAGE.with(|service| service
+        .borrow_mut()
+        .insert(buyer.id, buyer.clone()));
 }
 
 //get Future contract by id
@@ -374,19 +378,19 @@ fn get_contracts_by_contract_status(contract_status: ContractStatus) -> Vec<Futu
 
 // get Future contracts by farmer
 #[ic_cdk::query]
- fn get_contracts_by_farmer(farmer: Principal) -> Vec<FutureContract> {
-    FURURE_CONTRACT_STORAGE.with(|service| service.borrow().iter().map(|(_key, value)| value.clone()).filter(|contract| contract.farmer == Some(farmer)).collect())
+ fn get_contracts_by_farmer(farmer: String) -> Vec<FutureContract> {
+    FURURE_CONTRACT_STORAGE.with(|service| service.borrow().iter().map(|(_key, value)| value.clone()).filter(|contract| contract.farmer == Some(farmer.clone())).collect())
 }
 
 // get Future contracts by buyer
 #[ic_cdk::query]
-fn get_contracts_by_buyer(buyer: Principal) -> Vec<FutureContract> {
+fn get_contracts_by_buyer(buyer: String) -> Vec<FutureContract> {
     FURURE_CONTRACT_STORAGE.with(|service| {
         service
             .borrow()
             .iter()
             .map(|(_key, value)| value.clone())
-            .filter(|contract| contract.buyer == Some(buyer))
+            .filter(|contract| contract.buyer == Some(buyer.clone()))
             .collect()
     })
 }
@@ -436,7 +440,7 @@ fn do_insert_future_contract(future_contract: &FutureContract) {
 
 // method to accept the contract by the farmer
 #[ic_cdk::update]
-async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Principal) -> Result<FutureContract, String> {
+async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Principal, identifier: String) -> Result<FutureContract, String> {
 
     let amount = Tokens::from_e8s(1_000_000);
     let mut future_contract = match_get_future_contract(&id)
@@ -449,8 +453,8 @@ async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Pr
     } else {
         future_contract.contract_status = ContractStatus::Pending;
     }
-    future_contract.farmer = Some(ic_cdk::caller());
-    future_contract.short_position_holder = Some(ic_cdk::caller());
+    future_contract.farmer = Some(identifier.clone());
+    future_contract.short_position_holder = Some(identifier.clone());
     future_contract.bargain = Some(bargain.unwrap_or("".to_string()));
     do_insert_future_contract(&future_contract);
 
@@ -468,7 +472,7 @@ async fn claim_short_position(id: u64, bargain: Option<String>, to_principal: Pr
 
 // method to accept the contract by the buyer
 #[ic_cdk::update]
-async fn claim_long_position(id: u64, bargain: Option<String>, to_principal: Principal) -> Result<FutureContract, String> {
+async fn claim_long_position(id: u64, bargain: Option<String>, to_principal: Principal, identifier: String) -> Result<FutureContract, String> {
     let amount = Tokens::from_e8s(1_000_000);
     let mut future_contract = match_get_future_contract(&id)
         .ok_or_else(|| format!("FutureContract with id={} not found", id))?;
@@ -480,8 +484,8 @@ async fn claim_long_position(id: u64, bargain: Option<String>, to_principal: Pri
     } else {
         future_contract.contract_status = ContractStatus::Pending;
     }
-    future_contract.buyer = Some(ic_cdk::caller());
-    future_contract.long_position_holder = Some(ic_cdk::caller());
+    future_contract.buyer = Some(identifier.clone());
+    future_contract.long_position_holder = Some(identifier.clone());
     future_contract.bargain = Some(bargain.unwrap_or("".to_string()));
     do_insert_future_contract(&future_contract);
 

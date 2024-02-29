@@ -4,11 +4,11 @@ import type { IDL } from '@dfinity/candid';
 
 export interface Buyer {
   'id' : bigint,
-  'principal' : Principal,
   'name' : string,
   'email' : [] | [string],
   'organization' : [] | [string],
   'phone_number' : string,
+  'identifier' : string,
   'location' : string,
 }
 export interface BuyerPayload {
@@ -16,6 +16,7 @@ export interface BuyerPayload {
   'email' : [] | [string],
   'organization' : [] | [string],
   'phone_number' : string,
+  'identifier' : string,
   'location' : string,
 }
 export type ContractStatus = { 'Terminated' : null } |
@@ -26,13 +27,13 @@ export type ContractStatus = { 'Terminated' : null } |
 export interface Farmer {
   'id' : bigint,
   'updated_at' : [] | [bigint],
-  'principal' : Principal,
   'size_of_land' : bigint,
   'name' : string,
   'created_at' : bigint,
   'national_id' : string,
   'email' : [] | [string],
   'phone_number' : string,
+  'identifier' : string,
   'location' : string,
   'croptypes' : Array<string>,
 }
@@ -42,6 +43,7 @@ export interface FarmerPayload {
   'national_id' : string,
   'email' : [] | [string],
   'phone_number' : string,
+  'identifier' : string,
   'location' : string,
   'croptypes' : Array<string>,
 }
@@ -78,11 +80,11 @@ export interface _SERVICE {
   'add_buyer' : ActorMethod<[BuyerPayload], [] | [Buyer]>,
   'add_farmer' : ActorMethod<[FarmerPayload], [] | [Farmer]>,
   'claim_long_position' : ActorMethod<
-    [bigint, [] | [string], Principal],
+    [bigint, [] | [string], Principal, string],
     Result
   >,
   'claim_short_position' : ActorMethod<
-    [bigint, [] | [string], Principal],
+    [bigint, [] | [string], Principal, string],
     Result
   >,
   'create_future_contract' : ActorMethod<
@@ -93,15 +95,15 @@ export interface _SERVICE {
   'get_all_farmers' : ActorMethod<[], Array<Farmer>>,
   'get_all_future_contracts' : ActorMethod<[], Array<FutureContract>>,
   'get_buyer' : ActorMethod<[bigint], Result_1>,
-  'get_buyer_by_principal' : ActorMethod<[Principal], Result_1>,
-  'get_contracts_by_buyer' : ActorMethod<[Principal], Array<FutureContract>>,
+  'get_buyer_by_identifier' : ActorMethod<[string], Result_2>,
+  'get_contracts_by_buyer' : ActorMethod<[string], Array<FutureContract>>,
   'get_contracts_by_contract_status' : ActorMethod<
     [ContractStatus],
     Array<FutureContract>
   >,
-  'get_contracts_by_farmer' : ActorMethod<[Principal], Array<FutureContract>>,
+  'get_contracts_by_farmer' : ActorMethod<[string], Array<FutureContract>>,
   'get_farmer' : ActorMethod<[bigint], Result_2>,
-  'get_farmer_by_principal' : ActorMethod<[Principal], Result_2>,
+  'get_farmer_by_identifier' : ActorMethod<[string], Result_2>,
   'get_future_contract' : ActorMethod<[bigint], Result>,
   'get_principal' : ActorMethod<[], Principal>,
 }

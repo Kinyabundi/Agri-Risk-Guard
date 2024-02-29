@@ -4,15 +4,16 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Opt(IDL.Text),
     'organization' : IDL.Opt(IDL.Text),
     'phone_number' : IDL.Text,
+    'identifier' : IDL.Text,
     'location' : IDL.Text,
   });
   const Buyer = IDL.Record({
     'id' : IDL.Nat64,
-    'principal' : IDL.Principal,
     'name' : IDL.Text,
     'email' : IDL.Opt(IDL.Text),
     'organization' : IDL.Opt(IDL.Text),
     'phone_number' : IDL.Text,
+    'identifier' : IDL.Text,
     'location' : IDL.Text,
   });
   const FarmerPayload = IDL.Record({
@@ -21,19 +22,20 @@ export const idlFactory = ({ IDL }) => {
     'national_id' : IDL.Text,
     'email' : IDL.Opt(IDL.Text),
     'phone_number' : IDL.Text,
+    'identifier' : IDL.Text,
     'location' : IDL.Text,
     'croptypes' : IDL.Vec(IDL.Text),
   });
   const Farmer = IDL.Record({
     'id' : IDL.Nat64,
     'updated_at' : IDL.Opt(IDL.Nat64),
-    'principal' : IDL.Principal,
     'size_of_land' : IDL.Nat64,
     'name' : IDL.Text,
     'created_at' : IDL.Nat64,
     'national_id' : IDL.Text,
     'email' : IDL.Opt(IDL.Text),
     'phone_number' : IDL.Text,
+    'identifier' : IDL.Text,
     'location' : IDL.Text,
     'croptypes' : IDL.Vec(IDL.Text),
   });
@@ -74,12 +76,12 @@ export const idlFactory = ({ IDL }) => {
     'add_buyer' : IDL.Func([BuyerPayload], [IDL.Opt(Buyer)], []),
     'add_farmer' : IDL.Func([FarmerPayload], [IDL.Opt(Farmer)], []),
     'claim_long_position' : IDL.Func(
-        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal],
+        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal, IDL.Text],
         [Result],
         [],
       ),
     'claim_short_position' : IDL.Func(
-        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal],
+        [IDL.Nat64, IDL.Opt(IDL.Text), IDL.Principal, IDL.Text],
         [Result],
         [],
       ),
@@ -96,9 +98,9 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'get_buyer' : IDL.Func([IDL.Nat64], [Result_1], ['query']),
-    'get_buyer_by_principal' : IDL.Func([IDL.Principal], [Result_1], ['query']),
+    'get_buyer_by_identifier' : IDL.Func([IDL.Text], [Result_2], ['query']),
     'get_contracts_by_buyer' : IDL.Func(
-        [IDL.Principal],
+        [IDL.Text],
         [IDL.Vec(FutureContract)],
         ['query'],
       ),
@@ -108,16 +110,12 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'get_contracts_by_farmer' : IDL.Func(
-        [IDL.Principal],
+        [IDL.Text],
         [IDL.Vec(FutureContract)],
         ['query'],
       ),
     'get_farmer' : IDL.Func([IDL.Nat64], [Result_2], ['query']),
-    'get_farmer_by_principal' : IDL.Func(
-        [IDL.Principal],
-        [Result_2],
-        ['query'],
-      ),
+    'get_farmer_by_identifier' : IDL.Func([IDL.Text], [Result_2], ['query']),
     'get_future_contract' : IDL.Func([IDL.Nat64], [Result], ['query']),
     'get_principal' : IDL.Func([], [IDL.Principal], ['query']),
   });

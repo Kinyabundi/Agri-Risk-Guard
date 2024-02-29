@@ -8,6 +8,9 @@ import toast from "react-hot-toast";
 import { futures_contract } from "@/declarations/futures_contract";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+
+
 
 interface OnboardBuyerProps {
 	goToPreviousStep: () => void;
@@ -15,7 +18,7 @@ interface OnboardBuyerProps {
 
 const formSchema = object({
 	name: string().required("Name is required"),
-	email: string().email("Invalid email").required("Email is required"),
+	email: string().email("Invalid email"),
 	phone_number: string().required("Phone number is required"),
 	organization: string(),
 	location: string().required("Location is required"),
@@ -25,26 +28,36 @@ const OnboardBuyer = ({ goToPreviousStep }: OnboardBuyerProps) => {
 	const formMethods = useForm({ resolver: yupResolver(formSchema) });
 	const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
+	const { identifier } = useAuth();
 
+	console.log("37",identifier);
 	const { handleSubmit, reset, control } = formMethods;
+
 
 	const onSubmit = async (data: InferType<typeof formSchema>) => {
 		const payload = {
 			name: data.name,
-			email: [data.email],
+            email: data?.email ? [data?.email] : [],
 			phone_number: data.phone_number,
 			organization: data?.organization ? [data?.organization] : [],
 			location: data.location,
+			identifier: identifier,
 		};
 		const id = toast.loading("Creating account...");
 		setLoading(true);
 
 		try {
+			console.log("Payload", payload);
 			const newAccount = await futures_contract.add_buyer(payload as any);
-			console.log(newAccount);
-			toast.success("Account created successfully", { id });
-			reset();
-            router.push("/buyer");
+			console.log("New Account", newAccount);
+			if(newAccount.length > 0) {
+				console.log(newAccount);
+				toast.success("Account created successfully", { id });
+				router.push("/dashboard");
+				return;
+			} else {
+				toast.error("An error occurred. Please try again", { id });
+			}
 		} catch (err) {
 			console.error(err);
 			toast.error("An error occurred. Please try again", { id });

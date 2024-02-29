@@ -16,7 +16,7 @@ const MyContracts = () => {
 
 	const fetchAllContracts = async () => {
 		try {
-			const allContracts = await futures_contract.get_contracts_by_buyer(account?.principal);
+			const allContracts = await futures_contract.get_contracts_by_farmer(account?.identifier as string);
 			if (allContracts) {
 				// show only that are either created or pending
 				const filteredContracts = allContracts.filter((contract) => {

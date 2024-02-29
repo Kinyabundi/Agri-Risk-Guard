@@ -10,19 +10,17 @@ interface AppServicesProps {
 }
 
 const AppServices: FC<AppServicesProps> = ({ children }) => {
-	const { principal } = useAuth();
+	const { identifier } = useAuth();
 	const { setAccount } = useAuthStore();
 
 	useEffect(() => {
 		async function fetchAccount() {
-			if (!futures_contract || !principal) return;
+			if (!futures_contract || !identifier) return;
 
 			console.log(futures_contract);
-
-			const principalItem = await futures_contract.get_principal();
-			const principalObj = Principal.fromText(principalItem.toText());
-			const farmer = await futures_contract.get_farmer_by_principal(principalObj);
-			const buyer = await futures_contract.get_buyer_by_principal(principalObj);
+			
+			const farmer = await futures_contract.get_farmer_by_identifier(identifier);
+			const buyer = await futures_contract.get_buyer_by_identifier(identifier);
 
 			if (farmer?.["Err"] && buyer?.["Err"]) {
 				setAccount(null);
@@ -60,7 +58,7 @@ const AppServices: FC<AppServicesProps> = ({ children }) => {
 		}
 
 		fetchAccount();
-	}, [principal, futures_contract]);
+	}, [identifier, futures_contract]);
 	return <>{children}</>;
 };
 
