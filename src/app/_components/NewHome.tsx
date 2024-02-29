@@ -22,6 +22,8 @@ const NewHome = () => {
 			router.push(path);
 		}
 	};
+
+	console.log(account, "account");
 	return (
 		<section className="w-full min-h-screen bg-white dark:bg-gray-900">
 			<div className="container relative flex flex-col min-h-screen px-6 py-8 mx-auto">

@@ -18,42 +18,35 @@ const AppServices: FC<AppServicesProps> = ({ children }) => {
 			if (!futures_contract || !identifier) return;
 
 			console.log(futures_contract);
-			
+
 			const farmer = await futures_contract.get_farmer_by_identifier(identifier);
 			const buyer = await futures_contract.get_buyer_by_identifier(identifier);
 
+			console.log(farmer, "farmer");
+			console.log(buyer, "buyer");
+
 			if (farmer?.["Err"] && buyer?.["Err"]) {
+				console.log("both are null");
 				setAccount(null);
 				return;
 			}
 
+			const farmerWithOk = farmer?.["Ok"];
+			const farmerWithErr = farmer?.["Err"];
 			// check if both are null
-			if (farmer) {
-				// extract the farmer object
-				const farmerWithOk = farmer?.["Ok"];
-				const farmerWithErr = farmer?.["Err"];
-
-				if (farmerWithOk) {
-					setAccount({ ...farmerWithOk, accountType: "farmer" });
-					return;
-				}
-				if (farmerWithErr) {
-					setAccount(null);
-					return;
-				}
+			if (farmerWithOk) {
+				console.log(farmerWithOk, "farmerWithOk");
+				setAccount({ ...farmerWithOk, accountType: "farmer" });
+				return;
 			}
-			if (buyer) {
-				const buyerWithOk = buyer?.["Ok"];
-				const buyerWithErr = buyer?.["Err"];
 
-				if (buyerWithOk) {
-					setAccount({ ...buyerWithOk, accountType: "buyer" });
-					return;
-				}
-				if (buyerWithErr) {
-					setAccount(null);
-					return;
-				}
+			const buyerWithOk = buyer?.["Ok"];
+			const buyerWithErr = buyer?.["Err"];
+			
+			if (buyerWithOk) {
+				console.log(buyerWithOk, "buyerWithOk");
+				setAccount({ ...buyerWithOk, accountType: "buyer" });
+				return;
 			}
 		}
 

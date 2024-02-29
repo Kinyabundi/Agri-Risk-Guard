@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { Principal } from "@dfinity/principal";
 import { futures_contract } from "@/declarations/futures_contract";
 import { IContract } from "@/types/Contract";
+import { useAuth } from "@/context/AuthContext";
 
 interface ClaimLongPositionModalProps {
 	contractInfo: IContract;
@@ -16,6 +17,7 @@ const ClaimLongPositionModal = ({ contractInfo, refresh }: ClaimLongPositionModa
 	const [open, setOpen] = useState(false);
 	const [bargainingPosition, setBargainingPosition] = useState("");
 	const [loading, setLoading] = useState(false);
+	const { identifier } = useAuth();
 
 	const onClaim = async () => {
 		const id = toast.loading("Claiming short position...");
@@ -24,7 +26,7 @@ const ClaimLongPositionModal = ({ contractInfo, refresh }: ClaimLongPositionModa
 		try {
 			const trfPrincipal = Principal.fromText("od76w-ml76j-qr6fr-iusqv-bdost-ef44w-rzofd-73hsr-rkhy7-a4t6j-eqe");
 			// @ts-ignore
-			const result = await futures_contract.claim_long_position(contractInfo.id as unknown as bigint, bargainingPosition ? [bargainingPosition] : [], trfPrincipal);
+			const result = await futures_contract.claim_long_position(contractInfo.id as unknown as bigint, bargainingPosition ? [bargainingPosition] : [], trfPrincipal, identifier);
 			console.log("result", result);
 
 			if (result) {

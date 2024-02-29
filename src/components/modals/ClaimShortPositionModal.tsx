@@ -6,6 +6,7 @@ import { IContract } from "@/types/Contract";
 import { toast } from "react-hot-toast";
 import { futures_contract } from "@/declarations/futures_contract";
 import { Principal } from "@dfinity/principal";
+import { useAuth } from "@/context/AuthContext";
 
 interface ClaimShortPositionModalProps {
 	contractInfo: IContract;
@@ -16,6 +17,7 @@ const ClaimShortPositionModal = ({ contractInfo, refresh }: ClaimShortPositionMo
 	const [open, setOpen] = useState(false);
 	const [bargainingPosition, setBargainingPosition] = useState("");
 	const [loading, setLoading] = useState(false);
+	const { identifier } = useAuth();
 
 	const onClaim = async () => {
 		const id = toast.loading("Claiming short position...");
@@ -24,7 +26,7 @@ const ClaimShortPositionModal = ({ contractInfo, refresh }: ClaimShortPositionMo
 		try {
 			const trfPrincipal = Principal.fromText("od76w-ml76j-qr6fr-iusqv-bdost-ef44w-rzofd-73hsr-rkhy7-a4t6j-eqe");
 			// @ts-ignore
-			const result = await futures_contract.claim_short_position(contractInfo.id as unknown as bigint, bargainingPosition ? [bargainingPosition] : [], trfPrincipal);
+			const result = await futures_contract.claim_short_position(contractInfo.id as unknown as bigint, bargainingPosition ? [bargainingPosition] : [], trfPrincipal, identifier);
 
 			console.log("result", result);
 			if (result) {
@@ -44,7 +46,10 @@ const ClaimShortPositionModal = ({ contractInfo, refresh }: ClaimShortPositionMo
 	// console.log(Principal.fromText("8e0aaddb9613db99362549d6cb4aba837dd51b0b45a988a89d0274454217ea3e"))
 	return (
 		<>
-			<Button size="sm" onClick={() => setOpen(true)}> Claim Short Position</Button>
+			<Button size="sm" onClick={() => setOpen(true)}>
+				{" "}
+				Claim Short Position
+			</Button>
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent>
 					<DialogHeader>

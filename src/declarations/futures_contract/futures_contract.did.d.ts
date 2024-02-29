@@ -54,13 +54,13 @@ export interface FutureContract {
   'expected_month_of_harvest' : string,
   'price_per_unit' : bigint,
   'crop' : string,
-  'long_position_holder' : [] | [Principal],
+  'long_position_holder' : [] | [string],
   'bargain' : [] | [string],
   'farmer_accepted' : boolean,
-  'buyer' : [] | [Principal],
+  'buyer' : [] | [string],
   'expected_yield' : bigint,
-  'farmer' : [] | [Principal],
-  'short_position_holder' : [] | [Principal],
+  'farmer' : [] | [string],
+  'short_position_holder' : [] | [string],
   'contract_status' : ContractStatus,
 }
 export interface FutureContractPayload {
@@ -95,7 +95,7 @@ export interface _SERVICE {
   'get_all_farmers' : ActorMethod<[], Array<Farmer>>,
   'get_all_future_contracts' : ActorMethod<[], Array<FutureContract>>,
   'get_buyer' : ActorMethod<[bigint], Result_1>,
-  'get_buyer_by_identifier' : ActorMethod<[string], Result_2>,
+  'get_buyer_by_identifier' : ActorMethod<[string], Result_1>,
   'get_contracts_by_buyer' : ActorMethod<[string], Array<FutureContract>>,
   'get_contracts_by_contract_status' : ActorMethod<
     [ContractStatus],

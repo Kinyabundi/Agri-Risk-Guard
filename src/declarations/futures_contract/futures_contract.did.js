@@ -53,13 +53,13 @@ export const idlFactory = ({ IDL }) => {
     'expected_month_of_harvest' : IDL.Text,
     'price_per_unit' : IDL.Nat64,
     'crop' : IDL.Text,
-    'long_position_holder' : IDL.Opt(IDL.Principal),
+    'long_position_holder' : IDL.Opt(IDL.Text),
     'bargain' : IDL.Opt(IDL.Text),
     'farmer_accepted' : IDL.Bool,
-    'buyer' : IDL.Opt(IDL.Principal),
+    'buyer' : IDL.Opt(IDL.Text),
     'expected_yield' : IDL.Nat64,
-    'farmer' : IDL.Opt(IDL.Principal),
-    'short_position_holder' : IDL.Opt(IDL.Principal),
+    'farmer' : IDL.Opt(IDL.Text),
+    'short_position_holder' : IDL.Opt(IDL.Text),
     'contract_status' : ContractStatus,
   });
   const Result = IDL.Variant({ 'Ok' : FutureContract, 'Err' : IDL.Text });
@@ -98,7 +98,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'get_buyer' : IDL.Func([IDL.Nat64], [Result_1], ['query']),
-    'get_buyer_by_identifier' : IDL.Func([IDL.Text], [Result_2], ['query']),
+    'get_buyer_by_identifier' : IDL.Func([IDL.Text], [Result_1], ['query']),
     'get_contracts_by_buyer' : IDL.Func(
         [IDL.Text],
         [IDL.Vec(FutureContract)],
